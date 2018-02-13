@@ -1,4 +1,4 @@
-flight,equipmentName,originCode,destinationCode,depTime,arrTime,rev
+flight,equipmentName,originCode,destinationCode,depTime,arrTime,revenue
 PG   100,(PG)  319,USM,BKK,600,705,2623961
 PG   103,(PG)  319,BKK,USM,600,705,2623961
 PG   104,(PG)  319,USM,BKK,745,850,2623961
