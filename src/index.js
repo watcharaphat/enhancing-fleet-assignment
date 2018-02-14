@@ -22,8 +22,8 @@ async function getData() {
 }
 
 function convertToMin(timeString) {
-  if (timeString.length === 3) {
-    timeString = '0'.concat(timeString);
+  if (timeString.length < 4) {
+    timeString = '0'.repeat(4 - timeString.length).concat(timeString);
   }
   const hour = timeString[0].concat(timeString[1]);
   const minute = timeString[2].concat(timeString[3]);
@@ -71,6 +71,13 @@ function countOverlaps(flightTable, aircraft) {
         const range1 = flightTable[i].momentRange;
         const range2 = flightTable[j].momentRange;
 
+        let s = 'is ';
+        if (!isOperatable(flightTable[i], flightTable[j])) {
+          s = s.concat('not ');
+        }
+
+        // console.log(`${flightTable[i].flight} -> ${flightTable[j].flight} ${s} operatable`);
+
         if (range1.overlaps(range2)) {
           overlapsCount += 1;
           maxOverlaps = Math.max(maxOverlaps, overlapsCount);
@@ -86,7 +93,13 @@ async function dynamicAssign(aircraftList, flightTable) {
   console.log('Fleet Assigning.');
 
   // sort by arrTime
-  flightTable.sort(compareFlight);
+  flightTable.sort((row1, row2) => {
+    if (row1.momentRange.start < row2.momentRange.start) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
 
   let aList = [];
   let bList = [];
@@ -121,37 +134,83 @@ async function dynamicAssign(aircraftList, flightTable) {
   console.log(`a: ${a}`);
   console.log(`b: ${b}`);
   console.log(`c: ${c}`);
+
+  await optimum(aList);
+
+  aList.forEach((row) => {
+    // if (row.aircraftNo) {
+      printRow(row);
+    // }
+  });
 }
 
 let currentAircraft = 1;
 let latestRow = null;
 
+function assignAircraftNo(row, aircraftNo) {
+  row.aircraftNo = aircraftNo;
+}
+
 async function optimum(schedule) {
-  while (!isDone(schedule)) {
+  while (countNotAssigned(schedule) > 0) {
+  // for (let j = 0; j < 10; j++) {
+
     for (let i = 0; i < schedule.length; i++) {
       const row = schedule[i];
-  
-      if (!isConflict(row, latestRow)) {
-        row.aircraftNo = currentAircraft;
+
+      if (!row.aircraftNo && isOperatable(latestRow, row)) {
+        assignAircraftNo(row, currentAircraft);
         latestRow = row;
-        continue;
       }
     }
-  
-    latestRow = null;
+
     currentAircraft += 1;
+    latestRow = null;
+
+  // }
   }
+
+  // while (!isDone(schedule)) {
+  //   for (let i = 0; i < schedule.length; i++) {
+  //     const row = schedule[i];
+  
+  //     if (!isConflict(row, latestRow)) {
+  //       row.aircraftNo = currentAircraft;
+  //       latestRow = row;
+  //       continue;
+  //     }
+  //   }
+  
+  //   latestRow = null;
+  //   currentAircraft += 1;
+  // }
 }
 
 function isConflict(row1, row2) {
-  if (!row2) {
-    console.log('not conflict');
+  if (!row1) {
+    // console.log('not conflict');
     return false;
   }
 
-  console.log(`isConflict: ${row1.momentRange.overlaps(row2.momentRange)}`);
+  // console.log(`isConflict: ${row1.momentRange.overlaps(row2.momentRange)}`);
 
   return row1.momentRange.overlaps(row2.momentRange);
+}
+
+function countNotAssigned(schedule) {
+  let count = 0;
+
+  schedule.forEach((row) => { 
+    if (!row.aircraftNo) count += 1;
+  });
+
+  return count;
+}
+
+function isOperatable(row1, row2) {
+  if (!row1) return true;
+
+  return (row1.destinationCode === row2.originCode) && !isConflict(row1, row2);
 }
 
 function isDone(schedule) {
@@ -178,8 +237,12 @@ function compareFlight(row1, row2) {
   }
 }
 
+function printRow(row) {
+  console.log(`${row.flight}, ${row.equipmentName}, ${row.originCode} -> ${row.destinationCode}, depTime: ${row.depTime}, arrTime: ${row.arrTime}, aircraftNo. ${row.aircraftNo}`);
+}
+
 async function main() {
-  const turnTime = 30;
+  const turnTime = 25;
 
   const aircraftList = ['(PG) 319', '(PG) 320', '(PG) AT7'];
 
@@ -188,7 +251,7 @@ async function main() {
   const dataText = await getData();
   const data = Papa.parse(dataText, {
     header: true,
-    dynamicTyping: false,
+    dynamTyping: false,
   }).data;
 
   data.forEach((row) => {
