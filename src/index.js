@@ -127,34 +127,38 @@ async function dynamicAssign(aircraftList, flightTable) {
   //   }
   // });
 
-  const a = countOverlaps(flightTable, aircraftList[0]);
-  const b = countOverlaps(flightTable, aircraftList[1]);
-  const c = countOverlaps(flightTable, aircraftList[2]);
+  // const a = countOverlaps(flightTable, aircraftList[0]);
+  // const b = countOverlaps(flightTable, aircraftList[1]);
+  // const c = countOverlaps(flightTable, aircraftList[2]);
 
-  console.log(`a: ${a}`);
-  console.log(`b: ${b}`);
-  console.log(`c: ${c}`);
+  // console.log(`a: ${a}`);
+  // console.log(`b: ${b}`);
+  // console.log(`c: ${c}`);
 
   await optimum(aList);
+  await optimum(bList);
+  await optimum(cList);
 
-  aList.forEach((row) => {
-    // if (row.aircraftNo) {
-      printRow(row);
-    // }
+  console.log('\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n');
+
+  flightTable.forEach((row) => {
+    printRow(row);
   });
-}
 
-let currentAircraft = 1;
-let latestRow = null;
+  // aList.forEach((row) => {
+  //   printRow(row, 1);
+  // });
+}
 
 function assignAircraftNo(row, aircraftNo) {
   row.aircraftNo = aircraftNo;
 }
 
 async function optimum(schedule) {
-  while (countNotAssigned(schedule) > 0) {
-  // for (let j = 0; j < 10; j++) {
+  let currentAircraft = 1;
+  let latestRow = null;
 
+  while (countNotAssigned(schedule) > 0) {
     for (let i = 0; i < schedule.length; i++) {
       const row = schedule[i];
 
@@ -166,9 +170,9 @@ async function optimum(schedule) {
 
     currentAircraft += 1;
     latestRow = null;
-
-  // }
   }
+
+  console.log(`Optimum number for ${schedule[0].equipmentName} is ${currentAircraft - 1}`);
 
   // while (!isDone(schedule)) {
   //   for (let i = 0; i < schedule.length; i++) {
@@ -237,12 +241,15 @@ function compareFlight(row1, row2) {
   }
 }
 
-function printRow(row) {
+function printRow(row, filterAircraftNo) {
+  if (filterAircraftNo) {
+    if (row.aircraftNo !== filterAircraftNo) return;
+  }
   console.log(`${row.flight}, ${row.equipmentName}, ${row.originCode} -> ${row.destinationCode}, depTime: ${row.depTime}, arrTime: ${row.arrTime}, aircraftNo. ${row.aircraftNo}`);
 }
 
 async function main() {
-  const turnTime = 25;
+  const turnTime = 30;
 
   const aircraftList = ['(PG) 319', '(PG) 320', '(PG) AT7'];
 
