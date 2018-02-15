@@ -92,7 +92,7 @@ function countOverlaps(flightTable, aircraft) {
 async function dynamicAssign(aircraftList, flightTable) {
   console.log('Fleet Assigning.');
 
-  // sort by arrTime
+  // sort by arrTime: end
   flightTable.sort((row1, row2) => {
     if (row1.momentRange.start < row2.momentRange.start) {
       return -1;
@@ -144,6 +144,10 @@ async function dynamicAssign(aircraftList, flightTable) {
   flightTable.forEach((row) => {
     printRow(row);
   });
+
+  for (let i = 1; i <= 6; i++) {
+    checkAssignedSchedule(aList, i);
+  }
 
   // aList.forEach((row) => {
   //   printRow(row, 1);
@@ -238,6 +242,24 @@ function compareFlight(row1, row2) {
     return -1;
   } else {
     return 1;
+  }
+}
+
+function checkAssignedSchedule(schedule, aircraftNo) {
+  for (let i = 0; i < schedule.length; i++) {
+    const row1 = schedule[i];
+
+    for (let j = 0; j < schedule.length; j++) {
+      const row2 = schedule[j];
+      if (i === j) continue;
+      if (row1.aircraftNo !== row2.aircraftNo) continue;
+
+      if (isConflict(row1, row2)) {
+        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
+        console.log('CONFLICT!!!');
+        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
+      }
+    }
   }
 }
 
