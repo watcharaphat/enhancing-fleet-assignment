@@ -1,9 +1,10 @@
 import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import { convertTime, convertTimePlusTurnTime } from './modules/utils/ConvertTime';
 import fs from 'fs';
 import Papa from 'papaparse';
 import util from 'util';
+import { extendMoment } from 'moment-range';
+import { convertTime, convertTimePlusTurnTime } from './modules/utils/ConvertTime';
+import { printRow } from './modules/utils/PrintRow';
 // import timeSpaceNetwork from './algorithm/TimeSpaceNetwork';
 
 const moment = extendMoment(Moment);
@@ -20,36 +21,6 @@ async function getData() {
   } catch(error) {
     console.error(error);
   }
-}
-
-function countOverlaps(flightTable, aircraft) {
-  let maxOverlaps = 0;
-
-  for (let i = 0; i < flightTable.length; i++) {
-    let overlapsCount = 0;
-    for (let j = 0; j < flightTable.length; j++) {
-      if (i === j) continue;
-
-      if (flightTable[i].equipmentName === aircraft && flightTable[j].equipmentName === aircraft) {
-        const range1 = flightTable[i].momentRange;
-        const range2 = flightTable[j].momentRange;
-
-        let s = 'is ';
-        if (!isOperatable(flightTable[i], flightTable[j])) {
-          s = s.concat('not ');
-        }
-
-        // console.log(`${flightTable[i].flight} -> ${flightTable[j].flight} ${s} operatable`);
-
-        if (range1.overlaps(range2)) {
-          overlapsCount += 1;
-          maxOverlaps = Math.max(maxOverlaps, overlapsCount);
-        }
-      }
-    }
-  }
-
-  return maxOverlaps;
 }
 
 async function dynamicAssign(aircraftList, flightTable) {
@@ -232,13 +203,6 @@ function checkAssignedSchedule(schedule, aircraftNo) {
   if (conflictCount === 0) {
     console.log(`There is no conflict for aircraftNo: ${aircraftNo}`);
   }
-}
-
-function printRow(row, filterAircraftNo) {
-  if (filterAircraftNo) {
-    if (row.aircraftNo !== filterAircraftNo) return;
-  }
-  console.log(`${row.flight}, ${row.equipmentName}, ${row.originCode} -> ${row.destinationCode}, depTime: ${row.depTime}, arrTime: ${row.arrTime}, aircraftNo. ${row.aircraftNo}`);
 }
 
 async function timeSpaceAssign(aircraftList, flightTable) {
