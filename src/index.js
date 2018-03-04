@@ -1,11 +1,12 @@
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import { convertTime, convertTimePlusTurnTime } from './modules/utils/ConvertTime';
+import fs from 'fs';
+import Papa from 'papaparse';
+import util from 'util';
+// import timeSpaceNetwork from './algorithm/TimeSpaceNetwork';
 
 const moment = extendMoment(Moment);
-
-const util = require('util');
-const fs = require('fs');
-const Papa = require('papaparse');
 
 const readFileAsync = util.promisify(fs.readFile);
 
@@ -19,44 +20,6 @@ async function getData() {
   } catch(error) {
     console.error(error);
   }
-}
-
-function convertToMin(timeString) {
-  if (timeString.length < 4) {
-    timeString = '0'.repeat(4 - timeString.length).concat(timeString);
-  }
-  const hour = timeString[0].concat(timeString[1]);
-  const minute = timeString[2].concat(timeString[3]);
-
-  const hourMin = parseInt(hour) * 60;
-  const minMin = parseInt(minute);
-
-  const totalMin = hourMin + minMin;
-  return totalMin;
-}
-
-function convertToTimeString(minTime) {
-  let hour = Math.floor(minTime/60);
-  if (hour < 10) {
-    hour = '0'.concat(hour.toString());
-  }
-
-  let minute = minTime%60;
-
-  if (minute < 10) {
-    minute = '0'.concat(minute.toString());
-  }
-
-  const time = `${hour.toString()}:${minute.toString()}`;
-  return time;
-}
-
-function convertTime(timeString) {
-  return convertToTimeString(convertToMin(timeString));
-}
-
-function convertTimePlusTurnTime(timeString, turnTime) {
-  return convertToTimeString(convertToMin(timeString) + turnTime);
 }
 
 function countOverlaps(flightTable, aircraft) {
@@ -90,8 +53,9 @@ function countOverlaps(flightTable, aircraft) {
 }
 
 async function dynamicAssign(aircraftList, flightTable) {
-  console.log('Fleet Assigning.');
+  console.log('* * * * * * * * * * Dynamic Assign * * * * * * * * * *\n');
 
+  // sort by depTime: start
   // sort by arrTime: end
   flightTable.sort((row1, row2) => {
     if (row1.momentRange.start < row2.momentRange.start) {
@@ -246,6 +210,8 @@ function compareFlight(row1, row2) {
 }
 
 function checkAssignedSchedule(schedule, aircraftNo) {
+  let conflictCount = 0;
+
   for (let i = 0; i < schedule.length; i++) {
     const row1 = schedule[i];
 
@@ -255,11 +221,16 @@ function checkAssignedSchedule(schedule, aircraftNo) {
       if (row1.aircraftNo !== row2.aircraftNo) continue;
 
       if (isConflict(row1, row2)) {
+        conflictCount += 1;
         console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
         console.log('CONFLICT!!!');
         console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
       }
     }
+  }
+
+  if (conflictCount === 0) {
+    console.log(`There is no conflict for aircraftNo: ${aircraftNo}`);
   }
 }
 
@@ -268,6 +239,51 @@ function printRow(row, filterAircraftNo) {
     if (row.aircraftNo !== filterAircraftNo) return;
   }
   console.log(`${row.flight}, ${row.equipmentName}, ${row.originCode} -> ${row.destinationCode}, depTime: ${row.depTime}, arrTime: ${row.arrTime}, aircraftNo. ${row.aircraftNo}`);
+}
+
+async function timeSpaceAssign(aircraftList, flightTable) {
+  console.log('* * * * * * * * * * Time Space Network Assign * * * * * * * * * *\n');
+
+  flightTable.sort((row1, row2) => {
+    if (row1.momentRange.start < row2.momentRange.start) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
+
+  let aList = [];
+  let bList = [];
+  let cList = [];
+
+  flightTable.forEach((row) => {
+    switch(row.equipmentName) {
+      case '(PG) 319':
+        aList.push(row);
+        break;
+      case '(PG) 320':
+        bList.push(row);
+        break;
+      case '(PG) AT7':
+        cList.push(row);
+        break;
+    }
+  });
+
+  await constructTimeSpaceGraph(flightTable, flightTable[0].momentRange.start);
+}
+
+async function timeSpaceNetwork(schedule) {
+  ;
+}
+
+async function constructTimeSpaceGraph(schedule, time) {
+  console.log('Constructing Time Space Graph');
+
+  let scheduleAt
+  for (let i = 0; i < schedule.length; i++) {
+
+  }
 }
 
 async function main() {
@@ -306,6 +322,7 @@ async function main() {
   });
 
   await dynamicAssign(aircraftList, data);
+  // await timeSpaceAssign(aircraftList, data);
 }
 
 main();
