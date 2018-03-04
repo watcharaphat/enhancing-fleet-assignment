@@ -5,6 +5,7 @@ import util from 'util';
 import { extendMoment } from 'moment-range';
 import { convertTime, convertTimePlusTurnTime } from './modules/utils/ConvertTime';
 import { printRow } from './modules/utils/PrintRow';
+import { checkAssignedSchedule, isConflict } from './modules/utils/CheckAssignedSchedule';
 // import timeSpaceNetwork from './algorithm/TimeSpaceNetwork';
 
 const moment = extendMoment(Moment);
@@ -129,17 +130,6 @@ async function optimum(schedule) {
   // }
 }
 
-function isConflict(row1, row2) {
-  if (!row1) {
-    // console.log('not conflict');
-    return false;
-  }
-
-  // console.log(`isConflict: ${row1.momentRange.overlaps(row2.momentRange)}`);
-
-  return row1.momentRange.overlaps(row2.momentRange);
-}
-
 function countNotAssigned(schedule) {
   let count = 0;
 
@@ -177,31 +167,6 @@ function compareFlight(row1, row2) {
     return -1;
   } else {
     return 1;
-  }
-}
-
-function checkAssignedSchedule(schedule, aircraftNo) {
-  let conflictCount = 0;
-
-  for (let i = 0; i < schedule.length; i++) {
-    const row1 = schedule[i];
-
-    for (let j = 0; j < schedule.length; j++) {
-      const row2 = schedule[j];
-      if (i === j) continue;
-      if (row1.aircraftNo !== row2.aircraftNo) continue;
-
-      if (isConflict(row1, row2)) {
-        conflictCount += 1;
-        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
-        console.log('CONFLICT!!!');
-        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
-      }
-    }
-  }
-
-  if (conflictCount === 0) {
-    console.log(`There is no conflict for aircraftNo: ${aircraftNo}`);
   }
 }
 
