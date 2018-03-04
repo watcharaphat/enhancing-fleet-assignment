@@ -55,22 +55,6 @@ async function dynamicAssign(aircraftList, flightTable) {
     }
   });
 
-  // await optimum(aList);
-
-  // aList.forEach((row) => {
-  //   if (row.aircraftNo) {
-  //     console.log(row.flight);
-  //   }
-  // });
-
-  // const a = countOverlaps(flightTable, aircraftList[0]);
-  // const b = countOverlaps(flightTable, aircraftList[1]);
-  // const c = countOverlaps(flightTable, aircraftList[2]);
-
-  // console.log(`a: ${a}`);
-  // console.log(`b: ${b}`);
-  // console.log(`c: ${c}`);
-
   await optimum(aList);
   await optimum(bList);
   await optimum(cList);
@@ -113,21 +97,6 @@ async function optimum(schedule) {
   }
 
   console.log(`Optimum number for ${schedule[0].equipmentName} is ${currentAircraft - 1}`);
-
-  // while (!isDone(schedule)) {
-  //   for (let i = 0; i < schedule.length; i++) {
-  //     const row = schedule[i];
-  
-  //     if (!isConflict(row, latestRow)) {
-  //       row.aircraftNo = currentAircraft;
-  //       latestRow = row;
-  //       continue;
-  //     }
-  //   }
-  
-  //   latestRow = null;
-  //   currentAircraft += 1;
-  // }
 }
 
 function countNotAssigned(schedule) {
