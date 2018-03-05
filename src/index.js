@@ -5,7 +5,7 @@ import util from 'util';
 import { extendMoment } from 'moment-range';
 import { convertTime, convertTimePlusTurnTime } from './modules/utils/ConvertTime';
 import { printRow } from './modules/utils/PrintRow';
-import { checkAssignedSchedule, isConflict } from './modules/utils/CheckAssignedSchedule';
+import { checkAssignedSchedule, isConflict, countNotAssigned } from './modules/utils/CheckAssignedSchedule';
 // import timeSpaceNetwork from './algorithm/TimeSpaceNetwork';
 
 const moment = extendMoment(Moment);
@@ -99,16 +99,6 @@ async function optimum(schedule) {
   console.log(`Optimum number for ${schedule[0].equipmentName} is ${currentAircraft - 1}`);
 }
 
-function countNotAssigned(schedule) {
-  let count = 0;
-
-  schedule.forEach((row) => { 
-    if (!row.aircraftNo) count += 1;
-  });
-
-  return count;
-}
-
 function isOperatable(row1, row2) {
   if (!row1) return true;
 
@@ -171,17 +161,8 @@ async function timeSpaceAssign(aircraftList, flightTable) {
   await constructTimeSpaceGraph(flightTable, flightTable[0].momentRange.start);
 }
 
-async function timeSpaceNetwork(schedule) {
-  ;
-}
-
 async function constructTimeSpaceGraph(schedule, time) {
   console.log('Constructing Time Space Graph');
-
-  let scheduleAt
-  for (let i = 0; i < schedule.length; i++) {
-
-  }
 }
 
 async function main() {

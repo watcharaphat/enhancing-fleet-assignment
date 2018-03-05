@@ -33,3 +33,13 @@ export function isConflict(row1, row2) {
 
   return row1.momentRange.overlaps(row2.momentRange);
 }
+
+export function countNotAssigned(schedule) {
+  let count = 0;
+
+  schedule.forEach((row) => { 
+    if (!row.aircraftNo) count += 1;
+  });
+
+  return count;
+}
