@@ -65,9 +65,11 @@ async function dynamicAssign(aircraftList, flightTable) {
     printRow(row);
   });
 
-  for (let i = 1; i <= 6; i++) {
-    checkAssignedSchedule(aList, i);
-  }
+  let ts = constructTimeSpaceGraphOnTime(aList, aList[0].depTime);
+
+  // for (let i = 1; i <= 6; i++) {
+  //   checkAssignedSchedule(aList, i);
+  // }
 
   // aList.forEach((row) => {
   //   printRow(row, 1);
@@ -105,21 +107,21 @@ function isOperatable(row1, row2) {
   return (row1.destinationCode === row2.originCode) && !isConflict(row1, row2);
 }
 
-function isDone(schedule) {
-  for (let i = 0; i < schedule.length; i++) {
-    const row = schedule[i];
+// function isDone(schedule) {
+//   for (let i = 0; i < schedule.length; i++) {
+//     const row = schedule[i];
 
-    if (!row.aircraftNo) {
-      console.log('not done')
-      return false;
-    }
-  }
+//     if (!row.aircraftNo) {
+//       console.log('not done')
+//       return false;
+//     }
+//   }
 
-  console.log('done');
+//   console.log('done');
 
-  // all row in schedule assigned
-  return true;
-}
+//   // all row in schedule assigned
+//   return true;
+// }
 
 function compareFlight(row1, row2) {
   if (row1.momentRange.end < row2.momentRange.end) {
@@ -158,11 +160,101 @@ async function timeSpaceAssign(aircraftList, flightTable) {
     }
   });
 
-  await constructTimeSpaceGraph(flightTable, flightTable[0].momentRange.start);
+  // await constructTimeSpaceGraphOnTime(flightTable, flightTable[0].momentRange.start);
+  await constructTimeSpaceGraphOnTime(flightTable);
 }
 
-async function constructTimeSpaceGraph(schedule, time) {
-  console.log('Constructing Time Space Graph');
+// async function constructTimeSpaceGraphOnTime(schedule, time) {
+//   console.log(`Constructing Time Space Graph at ${time}`);
+
+//   const aircraftList = ['(PG) 319', '(PG) 320', '(PG) AT7'];
+//   let tsGraph = {
+//     '(PG) 319': {},
+//     '(PG) 320': {},
+//     '(PG) AT7': {},
+//   };
+
+//   for (let i = 0; i < schedule.length; i++) {
+//     const row = schedule[i];
+//     const equipmentName = row.equipmentName;
+//     const aircraftNo = row.aircraftNo;
+
+//     // console.log(aircraftNo);
+
+//     if (!tsGraph[equipmentName][aircraftNo.toString()]) {
+//       initAircraftGraph(tsGraph, equipmentName, aircraftNo)
+//       // console.log(`init ${equipmentName}: ${aircraftNo}`);
+//     }
+
+//     const timeMoment = moment(`${moment().format('YYYY-MM-DD')} ${time}`);
+//     let isOnGround = true;
+    
+//     if (row.momentRange.contains(timeMoment)) {
+//       console.log(`${i}: contains`);
+//       isOnGround = false;
+//     } else {
+//       console.log(`${i}: not`);
+//       isOnGround = true;
+//     }
+//   }
+
+//   console.log(tsGraph);
+// }
+
+async function constructTimeSpaceGraphOnTime(schedule) {
+  console.log(`Constructing Time Space Graph for all time`);
+
+  const aircraftList = ['(PG) 319', '(PG) 320', '(PG) AT7'];
+  let tsGraph = {
+    '(PG) 319': {},
+    // '(PG) 320': {},
+    // '(PG) AT7': {},
+  };
+
+  const times = new Set();
+
+  schedule.forEach((row) => {
+    const depMoment = row.momentRange.start;
+    const arrMoment = row.momentRange.end;
+
+    times.add(depMoment);
+    times.add(arrMoment);
+  });
+
+  console.log(times);
+
+  for (let i = 0; i < schedule.length; i++) {
+    const row = schedule[i];
+    const equipmentName = row.equipmentName;
+    const aircraftNo = row.aircraftNo;
+
+    // console.log(aircraftNo);
+
+    if (!tsGraph[equipmentName][aircraftNo.toString()]) {
+      initAircraftGraph(tsGraph, equipmentName, aircraftNo)
+      // console.log(`init ${equipmentName}: ${aircraftNo}`);
+    }
+
+    // const timeMoment = moment(`${moment().format('YYYY-MM-DD')} ${time}`);
+    // let isOnGround = true;
+    
+    // if (row.momentRange.contains(timeMoment)) {
+    //   console.log(`${i}: contains`);
+    //   isOnGround = false;
+    // } else {
+    //   console.log(`${i}: not`);
+    //   isOnGround = true;
+    // }
+  }
+
+  console.log(tsGraph);
+}
+
+function initAircraftGraph(tsGraph, equipmentName, aircraftNo) {
+  // console.log(equipmentName);
+  tsGraph[equipmentName][aircraftNo] = {
+    status: '',
+  };
 }
 
 async function main() {
