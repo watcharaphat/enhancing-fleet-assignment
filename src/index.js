@@ -250,11 +250,17 @@ async function constructTimeSpaceGraphOnTime(schedule) {
 
   // const times = [...timesSet];
 
+  // max number of links
+  let max = -1;
+
   for (let i = 0; i < times.length; i++) {
     const timeMoment = times[i];
     // console.log(timeMoment);
     tsGraph['(PG) 319'][timeMoment] = {};
     const g = tsGraph['(PG) 319'][timeMoment]; // a shortcut
+    
+    // init links array
+    g.links = [];
 
     for (let j = 0; j < schedule.length; j++) {
       const row = schedule[j];
@@ -264,13 +270,19 @@ async function constructTimeSpaceGraphOnTime(schedule) {
         const b = row.momentRange.end.format('HH:mm:ss');
         const z = timeMoment.format('HH:mm:ss');
 
-        console.log(`${a} - ${b} contains ${z}`);
+        g.links.push(`${row.originCode} -> ${row.destinationCode}`);
       }
 
       // if (timeMoment.isBefore(row.momentRange.start)) {
       //   console.log(`${timeMoment.format('HH:mm:ss')} isBefore ${row.momentRange.start.format('HH:mm:ss')}`);
       //   break;
       // }
+    }
+
+    for (let time in tsGraph['(PG) 319']) {
+      const numberOfLinks = tsGraph['(PG) 319'][time].links.length;
+
+      max = numberOfLinks > max ? numberOfLinks : max;
     }
   }
 
@@ -299,15 +311,16 @@ async function constructTimeSpaceGraphOnTime(schedule) {
   //   // }
   // }
 
-  console.log(tsGraph);
+  console.log(util.inspect(tsGraph, false, null, true));
+  console.log(`Max number of links: ${max}`);
 }
 
-function initAircraftGraph(tsGraph, equipmentName, aircraftNo) {
-  // console.log(equipmentName);
-  tsGraph[equipmentName][aircraftNo] = {
-    status: '',
-  };
-}
+// function initAircraftGraph(tsGraph, equipmentName, aircraftNo) {
+//   // console.log(equipmentName);
+//   tsGraph[equipmentName][aircraftNo] = {
+//     status: '',
+//   };
+// }
 
 async function main() {
   const turnTime = 30;
