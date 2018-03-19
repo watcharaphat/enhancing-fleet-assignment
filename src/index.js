@@ -259,10 +259,18 @@ async function constructTimeSpaceGraphOnTime(schedule) {
     for (let j = 0; j < schedule.length; j++) {
       const row = schedule[j];
 
-      if (timeMoment.isBefore(row.momentRange.start)) {
-        console.log(`${timeMoment.format('hh:mm:ss')} isBefore ${row.momentRange.start.format('hh:mm:ss')}`);
-        break;
+      if (row.momentRange.contains(timeMoment)) {
+        const a = row.momentRange.start.format('HH:mm:ss');
+        const b = row.momentRange.end.format('HH:mm:ss');
+        const z = timeMoment.format('HH:mm:ss');
+
+        console.log(`${a} - ${b} contains ${z}`);
       }
+
+      // if (timeMoment.isBefore(row.momentRange.start)) {
+      //   console.log(`${timeMoment.format('HH:mm:ss')} isBefore ${row.momentRange.start.format('HH:mm:ss')}`);
+      //   break;
+      // }
     }
   }
 
