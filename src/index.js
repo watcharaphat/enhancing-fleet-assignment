@@ -202,7 +202,7 @@ async function timeSpaceAssign(aircraftList, flightTable) {
 // }
 
 async function constructTimeSpaceGraphOnTime(schedule) {
-  console.log(`Constructing Time Space Graph for all time`);
+  console.log(`\n\n***** Constructing Time Space Graph for all time *****\n\n`);
 
   const aircraftList = ['(PG) 319', '(PG) 320', '(PG) AT7'];
   let tsGraph = {
@@ -211,41 +211,85 @@ async function constructTimeSpaceGraphOnTime(schedule) {
     // '(PG) AT7': {},
   };
 
-  const times = new Set();
+  // const timesSet = new Set();
+  const times = [];
 
   schedule.forEach((row) => {
     const depMoment = row.momentRange.start;
     const arrMoment = row.momentRange.end;
 
-    times.add(depMoment);
-    times.add(arrMoment);
+    // timesSet.add(depMoment);
+    // timesSet.add(arrMoment);
+    
+    let isDepSame = false;
+    for (let i = 0; i < times.length; i++) {
+      if (times[i].isSame(depMoment)) {
+        isDepSame = true;
+        break;
+      }
+    }
+    if (!isDepSame) times.push(depMoment);
+
+    let isArrSame = false;
+    for (let i = 0; i < times.length; i++) {
+      if (times[i].isSame(arrMoment)) {
+        isDepSame = true;
+        break;
+      }
+    }
+    if (!isArrSame) times.push(arrMoment);
   });
 
-  console.log(times);
-
-  for (let i = 0; i < schedule.length; i++) {
-    const row = schedule[i];
-    const equipmentName = row.equipmentName;
-    const aircraftNo = row.aircraftNo;
-
-    // console.log(aircraftNo);
-
-    if (!tsGraph[equipmentName][aircraftNo.toString()]) {
-      initAircraftGraph(tsGraph, equipmentName, aircraftNo)
-      // console.log(`init ${equipmentName}: ${aircraftNo}`);
+  times.sort((time1, time2) => {
+    if (time1.isBefore(time2)) {
+      return -1;
+    } else {
+      return 1;
     }
+  });
 
-    // const timeMoment = moment(`${moment().format('YYYY-MM-DD')} ${time}`);
-    // let isOnGround = true;
-    
-    // if (row.momentRange.contains(timeMoment)) {
-    //   console.log(`${i}: contains`);
-    //   isOnGround = false;
-    // } else {
-    //   console.log(`${i}: not`);
-    //   isOnGround = true;
-    // }
+  // const times = [...timesSet];
+
+  for (let i = 0; i < times.length; i++) {
+    const timeMoment = times[i];
+    // console.log(timeMoment);
+    tsGraph['(PG) 319'][timeMoment] = {};
+    const g = tsGraph['(PG) 319'][timeMoment]; // a shortcut
+
+    for (let j = 0; j < schedule.length; j++) {
+      const row = schedule[j];
+
+      if (timeMoment.isBefore(row.momentRange.start)) {
+        console.log(`${timeMoment.format('hh:mm:ss')} isBefore ${row.momentRange.start.format('hh:mm:ss')}`);
+        break;
+      }
+    }
   }
+
+
+  // for (let i = 0; i < schedule.length; i++) {
+  //   const row = schedule[i];
+  //   const equipmentName = row.equipmentName;
+  //   const aircraftNo = row.aircraftNo;
+
+  //   // console.log(aircraftNo);
+
+  //   if (!tsGraph[equipmentName][aircraftNo.toString()]) {
+  //     initAircraftGraph(tsGraph, equipmentName, aircraftNo)
+  //     // console.log(`init ${equipmentName}: ${aircraftNo}`);
+  //   }
+
+  //   // const timeMoment = moment(`${moment().format('YYYY-MM-DD')} ${time}`);
+  //   // let isOnGround = true;
+    
+  //   // if (row.momentRange.contains(timeMoment)) {
+  //   //   console.log(`${i}: contains`);
+  //   //   isOnGround = false;
+  //   // } else {
+  //   //   console.log(`${i}: not`);
+  //   //   isOnGround = true;
+  //   // }
+  // }
 
   console.log(tsGraph);
 }
