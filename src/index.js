@@ -276,12 +276,14 @@ async function constructTimeSpaceGraphOnTime(schedule) {
         if (row.momentRange.end.isSame(timeMoment)) {
           g.links.push({
             'status': 'arrived',
+            'flight': row.flight,
             link,
             'aircraftNo': row.aircraftNo,
           });
         } else {
           g.links.push({
             'status': 'flight arc',
+            'flight': row.flight,
             link,
             'aircraftNo': row.aircraftNo,
           });
