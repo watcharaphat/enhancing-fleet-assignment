@@ -265,12 +265,30 @@ async function constructTimeSpaceGraphOnTime(schedule) {
     for (let j = 0; j < schedule.length; j++) {
       const row = schedule[j];
 
-      if (row.momentRange.contains(timeMoment)) {
+      // exclusive: false means momentRange.end is the same as timeMoment
+      if (row.momentRange.contains(timeMoment, { exclusive: false })) {
         const a = row.momentRange.start.format('HH:mm:ss');
         const b = row.momentRange.end.format('HH:mm:ss');
         const z = timeMoment.format('HH:mm:ss');
 
-        g.links.push(`${row.originCode} -> ${row.destinationCode}`);
+        const link = `${row.originCode} -> ${row.destinationCode}`;
+
+        if (row.momentRange.end.isSame(timeMoment)) {
+          g.links.push({
+            'status': 'arrived',
+            link,
+            'aircraftNo': row.aircraftNo,
+          });
+        } else {
+          g.links.push({
+            'status': 'flight arc',
+            link,
+            'aircraftNo': row.aircraftNo,
+          });
+          // g.links.push(`${row.originCode} -> ${row.destinationCode}`);
+        }
+
+
       }
 
       // if (timeMoment.isBefore(row.momentRange.start)) {
@@ -281,6 +299,7 @@ async function constructTimeSpaceGraphOnTime(schedule) {
 
     for (let time in tsGraph['(PG) 319']) {
       const numberOfLinks = tsGraph['(PG) 319'][time].links.length;
+      // if (numberOfLinks === 5) console.log(`*****\n${tsGraph['(PG) 319'][time].links}\n*****\n`);
 
       max = numberOfLinks > max ? numberOfLinks : max;
     }
