@@ -55,7 +55,7 @@ async function dynamicAssign(aircraftList, flightTable) {
     }
   });
 
-  await optimum(aList);
+  const A = await optimum(aList);
   await optimum(bList);
   await optimum(cList);
 
@@ -65,7 +65,11 @@ async function dynamicAssign(aircraftList, flightTable) {
     printRow(row);
   });
 
-  let ts = constructTimeSpaceGraphOnTime(aList, aList[0].depTime);
+  let decisionTree = getDecisionTree(aList, A + 1);
+  console.log('decisionTree: ', decisionTree);
+
+  /* testing timeSpaceGraph */
+  // let ts = constructTimeSpaceGraphOnTime(aList, aList[0].depTime);
 
   // for (let i = 1; i <= 6; i++) {
   //   checkAssignedSchedule(aList, i);
@@ -74,6 +78,72 @@ async function dynamicAssign(aircraftList, flightTable) {
   // aList.forEach((row) => {
   //   printRow(row, 1);
   // });
+}
+
+function getDecisionTree(schedule, numberOfAitcrafts) {
+  console.log('\n* * * * * Constructing Decision Tree * * * * *\n');
+  // clear aircraftNo, just for testing
+  schedule.forEach((row) => {
+    row.aircraftNo = undefined;
+  });
+
+  const decisionTree = [];
+  const currentPath = [];
+
+  // console.log(getOperatableList(schedule, 0));
+
+  let currentAircraft = 1;
+
+  const pathAssign = () => {
+    if (isPathComplete(schedule, currentPath)) {
+      console.log('* * * * * Path Complete! * * * * *');
+      decisionTree.push(currentPath);
+
+      return ;
+    }
+
+    for (let i = 0; i < schedule.length; i++) {
+      if (currentPath[i]) continue;
+
+      const row = schedule[i];
+      const choices = getOperatableList(schedule, i);
+
+      console.log(`choices[${i}]: ${choices}`);
+      currentPath[i] = currentAircraft;
+
+      // greedy decision
+      if (choices[0]) i = choices[0];
+
+      currentPath[i] = currentAircraft;
+      // console.log(currentPath);
+    }
+  };
+
+  while (!isPathComplete(schedule, currentPath)) {
+    pathAssign();
+    currentAircraft += 1;
+  }
+}
+
+function getOperatableList(schedule, latestRow) {
+  const operatableList = [];
+
+  for (let i = latestRow + 1; i < schedule.length; i++) {
+    if (isOperatable(schedule[latestRow], schedule[i])) {
+      operatableList.push(i);
+    }
+  }
+
+  return operatableList;
+}
+
+
+function isPathComplete(schedule, path) {
+  for (let i = 0; i < schedule.length; i++) {
+    if (!path[i]) return false;
+  }
+
+  return true;
 }
 
 function assignAircraftNo(row, aircraftNo) {
@@ -98,7 +168,10 @@ async function optimum(schedule) {
     latestRow = null;
   }
 
-  console.log(`Optimum number for ${schedule[0].equipmentName} is ${currentAircraft - 1}`);
+  const numberOfAitcrafts = currentAircraft - 1;
+  console.log(`Optimum number for ${schedule[0].equipmentName} is ${numberOfAitcrafts}`);
+
+  return numberOfAitcrafts;
 }
 
 function isOperatable(row1, row2) {

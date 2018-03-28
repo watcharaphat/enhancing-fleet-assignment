@@ -25,11 +25,8 @@ export function checkAssignedSchedule(schedule, aircraftNo) {
 
 export function isConflict(row1, row2) {
   if (!row1) {
-    // console.log('not conflict');
     return false;
   }
-
-  // console.log(`isConflict: ${row1.momentRange.overlaps(row2.momentRange)}`);
 
   return row1.momentRange.overlaps(row2.momentRange);
 }
