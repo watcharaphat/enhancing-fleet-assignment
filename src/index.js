@@ -95,34 +95,38 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
   let currentAircraft = 1;
 
   const pathAssign = () => {
-    if (isPathComplete(schedule, currentPath)) {
-      console.log('* * * * * Path Complete! * * * * *');
-      decisionTree.push(currentPath);
+    while (true) {
+      if (isPathComplete(schedule, currentPath)) {
+        console.log('* * * * * Path Complete! * * * * *');
+        decisionTree.push(currentPath);
 
-      return ;
-    }
+        return ;
+      }
 
-    for (let i = 0; i < schedule.length; i++) {
-      if (currentPath[i]) continue;
+      for (let i = 0; i < schedule.length; i++) {
+        if (currentPath[i]) continue;
 
-      const row = schedule[i];
-      const choices = getOperatableList(schedule, i);
+        const row = schedule[i];
+        const choices = getOperatableList(schedule, i);
 
-      console.log(`choices[${i}]: ${choices}`);
-      currentPath[i] = currentAircraft;
+        console.log(`choices[${i}]: ${choices}`);
+        currentPath[i] = currentAircraft;
 
-      // greedy decision
-      if (choices[0]) i = choices[0];
+        // greedy decision
+        if (choices[0]) i = choices[0];
 
-      currentPath[i] = currentAircraft;
-      // console.log(currentPath);
+        currentPath[i] = currentAircraft;
+      }
+
+      currentAircraft +=1 ;
     }
   };
 
-  while (!isPathComplete(schedule, currentPath)) {
+  // while (!isPathComplete(schedule, currentPath)) {
     pathAssign();
-    currentAircraft += 1;
-  }
+    console.log(currentPath);
+    // currentAircraft += 1;
+  // }
 }
 
 function getOperatableList(schedule, latestRow) {
