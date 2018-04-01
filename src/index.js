@@ -123,17 +123,20 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
     const row = schedule[currentRow];
 
     const choices = getOperatableList(schedule, currentRow);
-    console.log(`choices for AC${currentAircraft} at ${currentRow} are: ${choices}`);
+    // console.log(`choices for AC${currentAircraft} at ${currentRow} are: ${choices}`);
 
     // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
 
+    const pickableChoices = [];
     let pickedChoice;
     for (let j = 0; j < choices.length; j++) {
       if (!currentPath[choices[j]]) {
-        pickedChoice = choices[j];
-        break;
+        pickableChoices.push(choices[j]);
+        if (!pickedChoice) pickedChoice = choices[j];
       }
     }
+    pickableChoices.push(null);
+    console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
 
     if (!pickedChoice) {
       // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
