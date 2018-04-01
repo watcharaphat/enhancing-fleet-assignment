@@ -5,6 +5,8 @@ export function checkAssignedSchedule(schedule, aircraftNo) {
     const row1 = schedule[i];
 
     for (let j = 0; j < schedule.length; j++) {
+      if (i === j) continue;
+
       const row2 = schedule[j];
       if (i === j) continue;
       if (row1.aircraftNo !== row2.aircraftNo) continue;
@@ -12,8 +14,8 @@ export function checkAssignedSchedule(schedule, aircraftNo) {
       if (isConflict(row1, row2)) {
         conflictCount += 1;
         console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
-        console.log('CONFLICT!!!');
-        console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
+        console.log(`CONFLICT in index ${i} and ${j} airCraftNo: ${aircraftNo} !!!`);
+        // console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
       }
     }
   }
