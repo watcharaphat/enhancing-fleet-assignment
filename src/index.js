@@ -120,43 +120,36 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
       return;
     }
 
-    for (let i = currentRow; i < schedule.length; i++) {
-      const row = schedule[i];
+    const row = schedule[currentRow];
 
-      if (currentPath[i]) {
-        // skip assigned flight.
-        continue;
+    const choices = getOperatableList(schedule, currentRow);
+    console.log(`choices for AC${currentAircraft} at ${currentRow} are: ${choices}`);
+
+    // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
+
+    if (choices[0]) {
+      let choice;
+
+      for (let j = 0; j < choices.length; j++) {
+        if (!currentPath[choices[j]]) {
+          choice = choices[j];
+          break;
+        }
       }
 
-      const choices = getOperatableList(schedule, i);
-      console.log(`choices for AC${currentAircraft} at ${i} are: ${choices}`);
-
-      // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
-
-      if (choices[0]) {
-        let choice;
-
-        for (let j = 0; j < choices.length; j++) {
-          if (!currentPath[choices[j]]) {
-            choice = choices[j];
-            break;
-          }
-        }
-
-        if (!choice) {
-          // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
-          pathAssign(currentAircraft + 1, 0, currentPath, true);
-          return;
-        }
-
-        currentPath[choice] = currentAircraft;
-
-        // assign to DT for testing.
-        decisionTree[0] = currentPath;
-
-        pathAssign(currentAircraft, choice, currentPath, false);
+      if (!choice) {
+        // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
+        pathAssign(currentAircraft + 1, 0, currentPath, true);
         return;
       }
+
+      currentPath[choice] = currentAircraft;
+
+      // assign to DT for testing.
+      decisionTree[0] = currentPath;
+
+      pathAssign(currentAircraft, choice, currentPath, false);
+      return;
     }
 
     pathAssign(currentAircraft + 1, 0, currentPath, true);
