@@ -106,7 +106,7 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
   const pathAssign = (currentAircraft = 1, currentRow = 0 , currentPath = [], isNewAircraft = true) => {
     if (isPathComplete(schedule, currentPath)) {
       console.log('* * * * * FINISH A PATH ! ! ! * * * * *');
-      decisionTree.push(currentPath);
+      decisionTree.push(currentPath.slice());
       return;
     }
 
