@@ -61,21 +61,21 @@ async function dynamicAssign(aircraftList, flightTable) {
 
   console.log('\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n');
 
-  flightTable.forEach((row) => {
+  aList.forEach((row) => {
     printRow(row);
   });
 
+  // checkAssignedSchedule(flightTable, '= = = Checking Dynamic Assigned = = =');
+
   let decisionTree = getDecisionTree(aList, A + 1);
-  console.log('decisionTree: ', decisionTree);
+  console.log('decisionTree: ', decisionTree[0]);
 
   aList.forEach((row, index) => {
     row.aircraftNo = decisionTree[0][index];
     printRow(row);
   });
 
-  for (let i = 1; i <= 14; i++) {
-    // checkAssignedSchedule(aList,y i);
-  }
+  // checkAssignedSchedule(aList);
 
 
   /* testing timeSpaceGraph */
@@ -129,6 +129,9 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
       }
 
       const choices = getOperatableList(schedule, i);
+      console.log(`choices for AC${currentAircraft} at ${i} are: ${choices}`);
+
+      // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
 
       if (choices[0]) {
         let choice;
@@ -141,6 +144,7 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
         }
 
         if (!choice) {
+          // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
           pathAssign(currentAircraft + 1, 0, currentPath, true);
           return;
         }
