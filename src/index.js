@@ -68,6 +68,16 @@ async function dynamicAssign(aircraftList, flightTable) {
   let decisionTree = getDecisionTree(aList, A + 1);
   console.log('decisionTree: ', decisionTree);
 
+  aList.forEach((row, index) => {
+    row.aircraftNo = decisionTree[0][index];
+    printRow(row);
+  });
+
+  for (let i = 1; i <= 14; i++) {
+    // checkAssignedSchedule(aList,y i);
+  }
+
+
   /* testing timeSpaceGraph */
   // let ts = constructTimeSpaceGraphOnTime(aList, aList[0].depTime);
 
@@ -88,85 +98,79 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
   });
 
   const decisionTree = [];
-  const currentPath = [];
+  // const currentPath = [];
+  // let currentAircraft = 1;
 
   // console.log(getOperatableList(schedule, 0));
 
-  let currentAircraft = 1;
-
-  currentPath[0] = 1;
-
-  const pathAssign = () => {
-    while (true) {
-      if (isPathComplete(schedule, currentPath)) {
-        console.log('* * * * * Path Complete! * * * * *');
-        decisionTree.push(currentPath);
-
-        return ;
-      }
-
-      for (let i = 0; i < schedule.length; i++) {
-        if (currentPath[i]) continue;
-
-        const row = schedule[i];
-        const choices = getOperatableList(schedule, i);
-
-        console.log(`choices[${i}]: ${choices}`);
-        // currentPath[i] = currentAircraft;
-
-        // greedy decision
-        // if (choices[0]) {
-        //   currentPath[choices[j]] = currentAircraft;
-        //   i = choices[j];
-        // }
-
-        for (let j = 0; j < choices.length; j++) {
-          if (currentPath[choices[j]]) continue;
-
-          currentPath[choices[j]] = currentAircraft;
-          i = choices[j];
-          break;
-        }
-
-      }
-
-      currentAircraft +=1 ;
+  const pathAssign = (currentAircraft = 1, currentRow = 0 , currentPath = [], isNewAircraft = true) => {
+    if (isNewAircraft) {
       for (let i = 0; i < schedule.length; i++) {
         if (!currentPath[i]) {
           currentPath[i] = currentAircraft;
+          currentRow = i;
           break;
         }
       }
-      console.log(`CURRENT AIRCRAFT: ${currentAircraft}`);
     }
+    
+    if (isPathComplete(schedule, currentPath)) {
+      console.log('* * * * * FINISH A PATH ! ! ! * * * * *');
+      decisionTree.push(currentPath);
+      return;
+    }
+
+    for (let i = currentRow; i < schedule.length; i++) {
+      const row = schedule[i];
+
+      if (currentPath[i]) {
+        // skip assigned flight.
+        continue;
+      }
+
+      const choices = getOperatableList(schedule, i);
+
+      if (choices[0]) {
+        let choice;
+
+        for (let j = 0; j < choices.length; j++) {
+          if (!currentPath[choices[j]]) {
+            choice = choices[j];
+            break;
+          }
+        }
+
+        if (!choice) {
+          pathAssign(currentAircraft + 1, 0, currentPath, true);
+          return;
+        }
+
+        currentPath[choice] = currentAircraft;
+
+        // assign to DT for testing.
+        decisionTree[0] = currentPath;
+
+        pathAssign(currentAircraft, choice, currentPath, false);
+        return;
+      }
+    }
+
+    pathAssign(currentAircraft + 1, 0, currentPath, true);
   };
 
-  // while (!isPathComplete(schedule, currentPath)) {
-    pathAssign();
-    // console.log(currentPath);
-
-    // currentAircraft += 1;
-  // }
+  pathAssign();
 
   console.log('= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ');
-  console.log(currentPath);
 
-  schedule.forEach((row, index) => {
-    row.aircraftNo = currentPath[index];
-    printRow(row);
-  });
-
-  // for (let i = 1; i <= 7; i++) {
-  //   checkAssignedSchedule(schedule, i);
-  // }
+  return decisionTree;
 }
 
 function getOperatableList(schedule, latestRow) {
   const operatableList = [];
 
-  console.log(`* * * * * Operatable * * * * *`);
-  printRow(schedule[latestRow]);
-  console.log(`choices are:`);
+  // console.log(`* * * * * Operatable * * * * *`);
+  // printRow(schedule[latestRow]);
+  // console.log(`choices are:`);
 
   for (let i = latestRow + 1; i < schedule.length; i++) {
     if (isOperatable(schedule[latestRow], schedule[i])) {
@@ -174,11 +178,11 @@ function getOperatableList(schedule, latestRow) {
     }
   }
 
-  operatableList.forEach(index => {
-    printRow(schedule[index]);
-  });
+  // operatableList.forEach(index => {
+  //   printRow(schedule[index]);
+  // });
 
-  console.log('\n');
+  // console.log('\n');
 
   return operatableList;
 }
@@ -187,7 +191,7 @@ function getOperatableList(schedule, latestRow) {
 function isPathComplete(schedule, path) {
   for (let i = 0; i < schedule.length; i++) {
     if (!path[i]) {
-      console.log(`not Complete: ${i}`);
+      // console.log(`not Complete: ${i}`);
       return false;
     }
   }
