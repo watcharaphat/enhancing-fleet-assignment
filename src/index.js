@@ -68,7 +68,7 @@ async function dynamicAssign(aircraftList, flightTable) {
   // checkAssignedSchedule(flightTable, '= = = Checking Dynamic Assigned = = =');
 
   let decisionTree = getDecisionTree(aList, A + 1);
-  console.log('decisionTree: ', decisionTree[0]);
+  console.log('decisionTree: ', decisionTree);
 
   aList.forEach((row, index) => {
     row.aircraftNo = decisionTree[0][index];
@@ -141,10 +141,8 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
       return;
     }
 
+    // assign aircraft to pickedChoice.
     currentPath[pickedChoice] = currentAircraft;
-
-    // assign to DT for testing.
-    decisionTree[0] = currentPath;
 
     pathAssign(currentAircraft, pickedChoice, currentPath, false);
     return;
