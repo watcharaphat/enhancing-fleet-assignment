@@ -127,32 +127,28 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
 
     // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
 
-    if (choices[0]) {
-      let choice;
+    let choice;
 
-      for (let j = 0; j < choices.length; j++) {
-        if (!currentPath[choices[j]]) {
-          choice = choices[j];
-          break;
-        }
+    for (let j = 0; j < choices.length; j++) {
+      if (!currentPath[choices[j]]) {
+        choice = choices[j];
+        break;
       }
+    }
 
-      if (!choice) {
-        // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
-        pathAssign(currentAircraft + 1, 0, currentPath, true);
-        return;
-      }
-
-      currentPath[choice] = currentAircraft;
-
-      // assign to DT for testing.
-      decisionTree[0] = currentPath;
-
-      pathAssign(currentAircraft, choice, currentPath, false);
+    if (!choice) {
+      // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
+      pathAssign(currentAircraft + 1, 0, currentPath, true);
       return;
     }
 
-    pathAssign(currentAircraft + 1, 0, currentPath, true);
+    currentPath[choice] = currentAircraft;
+
+    // assign to DT for testing.
+    decisionTree[0] = currentPath;
+
+    pathAssign(currentAircraft, choice, currentPath, false);
+    return;
   };
 
   pathAssign();
