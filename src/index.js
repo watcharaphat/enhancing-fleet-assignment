@@ -71,7 +71,7 @@ async function dynamicAssign(aircraftList, flightTable) {
   console.log('decisionTree size: ', decisionTree.length);
 
   aList.forEach((row, index) => {
-    row.aircraftNo = decisionTree[2][index];
+    row.aircraftNo = decisionTree[121][index];
     printRow(row);
   });
 
@@ -135,7 +135,8 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
     }
     pickableChoices.push(null);
 
-    // console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
+    // if (currentAircraft === 2)
+      // console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
 
     pickableChoices.forEach((choice) => {
       if (!choice) {
