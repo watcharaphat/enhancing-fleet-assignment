@@ -1,14 +1,14 @@
 Arguments: 
-  /usr/local/Cellar/node/8.1.0_1/bin/node /usr/local/bin/yarn install
+  /usr/local/Cellar/node/9.5.0/bin/node /Users/watcharaphat/.yarn/bin/yarn.js star
 
 PATH: 
   /Users/watcharaphat/.yarn/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/mysql/bin:/Users/watcharaphat/myProgram/apache-maven-3.5.0/bin:/Users/watcharaphat/.composer/vendor/bin
 
 Yarn version: 
-  1.3.2
+  1.5.1
 
 Node version: 
-  8.8.1
+  9.5.0
 
 Platform: 
   darwin x64
@@ -32,11 +32,20 @@ npm manifest:
       "babel-plugin-transform-object-rest-spread": "^6.26.0",
       "babel-plugin-transform-runtime": "^6.23.0",
       "babel-preset-env": "^1.6.0",
-      "eslint": "^4.8.0",
-      "eslint-plugin-babel": "^4.1.2"
+      "eslint": "^4.19.0",
+      "eslint-config-airbnb-base": "^12.1.0",
+      "eslint-config-google": "^0.9.1",
+      "eslint-config-standard": "^11.0.0",
+      "eslint-plugin-babel": "^4.1.2",
+      "eslint-plugin-import": "^2.9.0",
+      "eslint-plugin-node": "^6.0.1",
+      "eslint-plugin-promise": "^3.7.0",
+      "eslint-plugin-standard": "^3.0.1"
     },
     "dependencies": {
-      "bluebird": "^3.5.1",
+      "moment": "^2.20.1",
+      "moment-range": "^3.1.1",
+      "papaparse": "^4.3.7"
     }
   }
 
@@ -117,20 +126,6 @@ Lockfile:
   acorn@^5.2.1:
     version "5.3.0"
     resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.3.0.tgz#7446d39459c54fb49a80e6ee6478149b940ec822"
-  
-  adler-32@:
-    version "1.2.0"
-    resolved "https://registry.yarnpkg.com/adler-32/-/adler-32-1.2.0.tgz#6a3e6bf0a63900ba15652808cb15c6813d1a5f25"
-    dependencies:
-      exit-on-epipe "~1.0.1"
-      printj "~1.1.0"
-  
-  adler-32@~1.1.0:
-    version "1.1.0"
-    resolved "https://registry.yarnpkg.com/adler-32/-/adler-32-1.1.0.tgz#03551a5c7f0edfbd4fc8fa12a6814978eab651c3"
-    dependencies:
-      exit-on-epipe "~1.0.1"
-      printj "~1.1.0"
   
   ajv-keywords@^2.1.0:
     version "2.1.1"
@@ -241,12 +236,6 @@ Lockfile:
   async-each@^1.0.0:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
-  
-  async@*.*:
-    version "2.6.0"
-    resolved "https://registry.yarnpkg.com/async/-/async-2.6.0.tgz#61a29abb6fcc026fea77e56d1c6ec53a795951f4"
-    dependencies:
-      lodash "^4.14.0"
   
   asynckit@^0.4.0:
     version "0.4.0"
@@ -799,10 +788,6 @@ Lockfile:
     dependencies:
       inherits "~2.0.0"
   
-  bluebird@^3.5.1:
-    version "3.5.1"
-    resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
-  
   boom@2.x.x:
     version "2.10.1"
     resolved "https://registry.yarnpkg.com/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
@@ -848,19 +833,6 @@ Lockfile:
   caseless@~0.12.0:
     version "0.12.0"
     resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
-  
-  cfb@~0.11.0:
-    version "0.11.1"
-    resolved "https://registry.yarnpkg.com/cfb/-/cfb-0.11.1.tgz#a96db8f272a6c3fb99dbbb23ef41223f48be1ea7"
-    dependencies:
-      commander ""
-  
-  cfb@~1.0.1:
-    version "1.0.2"
-    resolved "https://registry.yarnpkg.com/cfb/-/cfb-1.0.2.tgz#f51d9bbe5b5d1e75700581d68222f2ef46ec2142"
-    dependencies:
-      commander "^2.12.1"
-      printj "~1.1.1"
   
   chalk@^1.1.3:
     version "1.1.3"
@@ -921,22 +893,6 @@ Lockfile:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   
-  codepage@:
-    version "1.12.0"
-    resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.12.0.tgz#9c95f5729f8d775ecc7d9819098a7fb239beeeaf"
-    dependencies:
-      commander "~2.11.0"
-      exit-on-epipe "~1.0.1"
-      voc "~1.0.0"
-  
-  codepage@~1.11.0:
-    version "1.11.1"
-    resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.11.1.tgz#86472397ea5b2cdbb07b77016a512477a3cb8823"
-    dependencies:
-      commander "~2.11.0"
-      exit-on-epipe "~1.0.1"
-      voc "~1.0.0"
-  
   color-convert@^1.9.0:
     version "1.9.1"
     resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.1.tgz#c1261107aeb2f294ebffec9ed9ecad529a6097ed"
@@ -947,23 +903,15 @@ Lockfile:
     version "1.1.3"
     resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   
-  colors@0.6.2:
-    version "0.6.2"
-    resolved "https://registry.yarnpkg.com/colors/-/colors-0.6.2.tgz#2423fe6678ac0c5dae8852e5d0e5be08c997abcc"
-  
   combined-stream@^1.0.5, combined-stream@~1.0.5:
     version "1.0.5"
     resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.5.tgz#938370a57b4a51dea2c77c15d5c5fdf895164009"
     dependencies:
       delayed-stream "~1.0.0"
   
-  commander@, commander@^2.11.0, commander@^2.12.1:
+  commander@^2.11.0:
     version "2.13.0"
     resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
-  
-  commander@~2.11.0:
-    version "2.11.0"
-    resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
   
   concat-map@0.0.1:
     version "0.0.1"
@@ -993,20 +941,6 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   
-  crc-32@:
-    version "1.2.0"
-    resolved "https://registry.yarnpkg.com/crc-32/-/crc-32-1.2.0.tgz#cb2db6e29b88508e32d9dd0ec1693e7b41a18208"
-    dependencies:
-      exit-on-epipe "~1.0.1"
-      printj "~1.1.0"
-  
-  crc-32@~1.1.1:
-    version "1.1.1"
-    resolved "https://registry.yarnpkg.com/crc-32/-/crc-32-1.1.1.tgz#5d739d5e4c6e352ad8304d73223d483fe55adb8d"
-    dependencies:
-      exit-on-epipe "~1.0.1"
-      printj "~1.1.0"
-  
   cross-spawn@^5.1.0:
     version "5.1.0"
     resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -1020,6 +954,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-2.0.5.tgz#3bdfecdc608147c1c67202fa291e7dca59eaa3b8"
     dependencies:
       boom "2.x.x"
+  
+  d@1:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/d/-/d-1.0.0.tgz#754bb5bfe55451da69a58b94d45f4c5b0462d58f"
+    dependencies:
+      es5-ext "^0.10.9"
   
   dashdash@^1.12.0:
     version "1.14.1"
@@ -1092,6 +1032,28 @@ Lockfile:
   electron-to-chromium@^1.3.30:
     version "1.3.31"
     resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.31.tgz#00d832cba9fe2358652b0c48a8816c8e3a037e9f"
+  
+  es5-ext@^0.10.35, es5-ext@^0.10.9, es5-ext@~0.10.14:
+    version "0.10.38"
+    resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.38.tgz#fa7d40d65bbc9bb8a67e1d3f9cc656a00530eed3"
+    dependencies:
+      es6-iterator "~2.0.3"
+      es6-symbol "~3.1.1"
+  
+  es6-iterator@~2.0.3:
+    version "2.0.3"
+    resolved "https://registry.yarnpkg.com/es6-iterator/-/es6-iterator-2.0.3.tgz#a7de889141a05a94b0854403b2d0a0fbfa98f3b7"
+    dependencies:
+      d "1"
+      es5-ext "^0.10.35"
+      es6-symbol "^3.1.1"
+  
+  es6-symbol@^3.1.0, es6-symbol@^3.1.1, es6-symbol@~3.1.1:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/es6-symbol/-/es6-symbol-3.1.1.tgz#bf00ef4fdab6ba1b46ecb7b629b4c7ed5715cc77"
+    dependencies:
+      d "1"
+      es5-ext "~0.10.14"
   
   escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
     version "1.0.5"
@@ -1185,10 +1147,6 @@ Lockfile:
   esutils@^2.0.2:
     version "2.0.2"
     resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
-  
-  exit-on-epipe@, exit-on-epipe@~1.0.1:
-    version "1.0.1"
-    resolved "https://registry.yarnpkg.com/exit-on-epipe/-/exit-on-epipe-1.0.1.tgz#0bdd92e87d5285d267daa8171d0eb06159689692"
   
   expand-brackets@^0.1.4:
     version "0.1.5"
@@ -1297,16 +1255,6 @@ Lockfile:
       asynckit "^0.4.0"
       combined-stream "^1.0.5"
       mime-types "^2.1.12"
-  
-  frac@0.3.1:
-    version "0.3.1"
-    resolved "https://registry.yarnpkg.com/frac/-/frac-0.3.1.tgz#577677b7fdcbe6faf7c461f1801d34137cda4354"
-  
-  frac@~1.1.0:
-    version "1.1.1"
-    resolved "https://registry.yarnpkg.com/frac/-/frac-1.1.1.tgz#5f7f5c2ae029167d90153eea4b7dd2958d43d1f5"
-    dependencies:
-      voc "~1.0.0"
   
   fs-readdir-recursive@^1.0.0:
     version "1.1.0"
@@ -1712,7 +1660,7 @@ Lockfile:
       prelude-ls "~1.1.2"
       type-check "~0.3.2"
   
-  lodash@^4.14.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
+  lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
     version "4.17.4"
     resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
   
@@ -1781,6 +1729,16 @@ Lockfile:
     dependencies:
       minimist "0.0.8"
   
+  moment-range@^3.1.1:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/moment-range/-/moment-range-3.1.1.tgz#5c52cf9fab29db9dd9bcd86d37e52b04a7a7271a"
+    dependencies:
+      es6-symbol "^3.1.0"
+  
+  moment@^2.20.1:
+    version "2.20.1"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
+  
   ms@2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -1796,13 +1754,6 @@ Lockfile:
   natural-compare@^1.4.0:
     version "1.4.0"
     resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
-  
-  node-excel-to-json@^0.0.3:
-    version "0.0.3"
-    resolved "https://registry.yarnpkg.com/node-excel-to-json/-/node-excel-to-json-0.0.3.tgz#9b99c40560e7206a29b580345bbe3616f91a6c9d"
-    dependencies:
-      async "*.*"
-      xlsx "^0.8.0"
   
   node-pre-gyp@^0.6.39:
     version "0.6.39"
@@ -1907,6 +1858,10 @@ Lockfile:
       mkdirp "^0.5.1"
       object-assign "^4.1.0"
   
+  papaparse@^4.3.7:
+    version "4.3.7"
+    resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-4.3.7.tgz#ed1e7183320d1e0839dfe9f7186185cfc5097b8d"
+  
   parse-glob@^3.0.4:
     version "3.0.4"
     resolved "https://registry.yarnpkg.com/parse-glob/-/parse-glob-3.0.4.tgz#b2c376cfb11f35513badd173ef0bb6e3a388391c"
@@ -1953,10 +1908,6 @@ Lockfile:
   preserve@^0.2.0:
     version "0.2.0"
     resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
-  
-  printj@~1.1.0, printj@~1.1.1:
-    version "1.1.1"
-    resolved "https://registry.yarnpkg.com/printj/-/printj-1.1.1.tgz#3749360215888d460a35b683ae13dcc02c620b47"
   
   private@^0.1.6, private@^0.1.7:
     version "0.1.8"
@@ -2208,20 +2159,6 @@ Lockfile:
     version "1.0.3"
     resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   
-  ssf@~0.10.1:
-    version "0.10.1"
-    resolved "https://registry.yarnpkg.com/ssf/-/ssf-0.10.1.tgz#f23d82b63792ef56089089c1cd0c848e911cdba6"
-    dependencies:
-      frac "~1.1.0"
-  
-  ssf@~0.8.1:
-    version "0.8.2"
-    resolved "https://registry.yarnpkg.com/ssf/-/ssf-0.8.2.tgz#b9d4dc6a1c1bcf76f8abfa96d7d7656fb2abecd6"
-    dependencies:
-      colors "0.6.2"
-      frac "0.3.1"
-      voc ""
-  
   sshpk@^1.7.0:
     version "1.13.1"
     resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.13.1.tgz#512df6da6287144316dc4c18fe1cf1d940739be3"
@@ -2401,10 +2338,6 @@ Lockfile:
       core-util-is "1.0.2"
       extsprintf "^1.2.0"
   
-  voc@, voc@~1.0.0:
-    version "1.0.0"
-    resolved "https://registry.yarnpkg.com/voc/-/voc-1.0.0.tgz#5465c0ce11d0881f7d8e36d8ca587043f33a25ae"
-  
   which@^1.2.9:
     version "1.3.0"
     resolved "https://registry.yarnpkg.com/which/-/which-1.3.0.tgz#ff04bdfc010ee547d780bec38e1ac1c2777d253a"
@@ -2431,39 +2364,19 @@ Lockfile:
     dependencies:
       mkdirp "^0.5.1"
   
-  xlsx@^0.11.17:
-    version "0.11.17"
-    resolved "https://registry.yarnpkg.com/xlsx/-/xlsx-0.11.17.tgz#507461fb9783ad0afe1cf751aeb59956e93232da"
-    dependencies:
-      adler-32 "~1.1.0"
-      cfb "~1.0.1"
-      codepage "~1.11.0"
-      commander "~2.11.0"
-      crc-32 "~1.1.1"
-      exit-on-epipe "~1.0.1"
-      ssf "~0.10.1"
-  
-  xlsx@^0.8.0:
-    version "0.8.8"
-    resolved "https://registry.yarnpkg.com/xlsx/-/xlsx-0.8.8.tgz#b92d76e0b5e4f060c9208d4b744756510443853a"
-    dependencies:
-      adler-32 ""
-      cfb "~0.11.0"
-      codepage ""
-      commander ""
-      crc-32 ""
-      exit-on-epipe ""
-      ssf "~0.8.1"
-  
   yallist@^2.1.2:
     version "2.1.2"
     resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
 
 Trace: 
-  SyntaxError: /Users/watcharaphat/Documents/CPEY4/ProjectRelate/code/enhancing-fleet-assignment/package.json: Unexpected token } in JSON at position 764
-      at JSON.parse (<anonymous>)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:770:59
+  Error: Command "star" not found. Did you mean "start"?
+      at new MessageError (/Users/watcharaphat/.yarn/lib/cli.js:186:110)
+      at /Users/watcharaphat/.yarn/lib/cli.js:87307:17
       at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:92:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:103:13
-      at <anonymous>
+      at step (/Users/watcharaphat/.yarn/lib/cli.js:98:30)
+      at /Users/watcharaphat/.yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/Users/watcharaphat/.yarn/lib/cli.js:23451:28)
+      at /Users/watcharaphat/.yarn/lib/cli.js:95:12
+      at runCommand (/Users/watcharaphat/.yarn/lib/cli.js:87312:22)
+      at Object.<anonymous> (/Users/watcharaphat/.yarn/lib/cli.js:87412:14)
