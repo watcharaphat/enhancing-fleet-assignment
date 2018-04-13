@@ -7,6 +7,7 @@ import { convertTime, convertTimePlusTurnTime } from './modules/utils/ConvertTim
 import { printRow } from './modules/utils/PrintRow';
 import { printMatrix } from './modules/utils/PrintMatrix';
 import { checkAssignedSchedule, isConflict, countNotAssigned } from './modules/utils/CheckAssignedSchedule';
+import { WriteToJsonFile, writeToJsonFile } from './modules/utils/WriteToJsonFile';
 // import timeSpaceNetwork from './algorithm/TimeSpaceNetwork';
 
 const moment = extendMoment(Moment);
@@ -118,6 +119,7 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
   schedule.forEach((row) => {
     row.aircraftNo = undefined;
   });
+  // writeToJsonFile('json/schedule.json', schedule);
 
   const decisionTree = [];
   const currentPath = [];
@@ -152,18 +154,29 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
     }
 
     if (isNewAircraft) {
-      for (let i = 0; i < schedule.length; i++) {
+      console.log(`*** New: ${currentAircraft}, cp: ${currentPath}`);
+      for (let i = currentRow; i < schedule.length; i++) {
+        // if (currentPath[i]) {
+        //   if (currentPath[i] === currentAircraft) {
+        //     console.log('bobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobo');
+        //     return;
+        //   }
+        // }
         if (!currentPath[i]) {
+          if (currentPath[i - 1] === currentAircraft) {
+            // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            // console.log(`AC${currentAircraft} is going to wrong`);
+            return;
+          }
           currentPath[i] = currentAircraft;
           currentRow = i;
-          // console.log(currentPath);
           break;
         }
       }
     }
 
     const choices = getOperatableList(schedule, currentRow);
-    // console.log(`choices for AC${currentAircraft} at ${currentRow} are: ${choices}`);
+    // console.log(`choices for row: ${currentRow} are: ${choices}`);
 
     // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
 
@@ -181,36 +194,42 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
     // console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
 
     // console.log(`choices: ${util.inspect(pickableChoices, false, null, true)}`);
-    // pathAssign(currentAircraft + 1, 0, true);
-    pickableChoices.forEach((choice) => {
-      if (choice === null) {
+
+    while (pickableChoices.length > 0) {
+      const pickedChoice = pickableChoices.shift();
+      if (!pickedChoice) {
         pathAssign(currentAircraft + 1, 0, true);
         return;
       }
 
-      currentPath[choice] = currentAircraft;
-      // if (currentAircraft === 3) {
-      //   // console.log(`Assigning AC${2} current at ${currentRow} to flight: ${choice} and currentPath is ${currentPath}`);
+      if (currentPath[pickableChoices - 1] === currentAircraft) {
+        console.log(';ofjdsjf;dsjflksjflk;wjlkdaskldjlaksdlkasjdklasj');
+      }
+
+      // if (!isValidAssign(schedule, pickedChoice, currentAircraft, currentPath)) {
+      //   return;
       // }
 
-      pathAssign(currentAircraft, choice, false);
-      delete currentPath[choice];
-    });
-
-    /*
-    if (!pickedChoice) {
-      // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
-      pathAssign(currentAircraft + 1, 0, currentPath, true);
-      return;
+      currentPath[pickedChoice] = currentAircraft;
+      pathAssign(currentAircraft, pickedChoice, false);
+      // console.log(`called recursion for same AC: ${currentAircraft}`);
+      delete currentPath[pickedChoice];
     }
 
-    // assign aircraft to pickedChoice.
-    currentPath[pickedChoice] = currentAircraft;
+    // pickableChoices.forEach((choice) => {
+    //   if (choice === null) {
+    //     pathAssign(currentAircraft + 1, 0, true);
+    //     return;
+    //   }
 
-    pathAssign(currentAircraft, pickedChoice, currentPath, false);
-    return;
-    */
+    //   currentPath[choice] = currentAircraft;
+    //   // if (currentAircraft === 3) {
+    //   //   // console.log(`Assigning AC${2} current at ${currentRow} to flight: ${choice} and currentPath is ${currentPath}`);
+    //   // }
 
+    //   pathAssign(currentAircraft, choice, false);
+    //   delete currentPath[choice];
+    // });
   };
 
   pathAssign();
@@ -218,6 +237,27 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
   console.log('= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ');
 
   return decisionTree;
+}
+
+function isValidAssign(schedule, index, aircraftNo, currentPath) {
+  let latestRow;
+
+  for (let i = schedule.length - 1; i >= 0; i--) {
+    if (currentPath[i] === aircraftNo) {
+      latestRow = i;
+    }
+  }
+
+  const isValid = isOperatable(schedule[latestRow], schedule[index]);
+
+  if (!isValid) { 
+    console.log(`!!! INVALID AT latest: ${latestRow}, index: ${index}`);
+
+    const ol = getOperatableList(schedule, latestRow);
+    console.log(`latestRow: ${latestRow}, ol: ${ol}`);
+  }
+
+  return isValid
 }
 
 function getOperatableList(schedule, latestRow) {
