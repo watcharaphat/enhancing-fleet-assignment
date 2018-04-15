@@ -1,10 +1,10 @@
-var rockPaperScissors = function(rounds) {
+var rockPaperScissors = async function(rounds) {
   rounds = rounds || 3;
   var outcomes = [];
   var thrown = [];
   var plays = ['rock', 'paper', 'scissors'];
   
-  var combos = function(roundsToGo) {
+  var combos = async function(roundsToGo) {
     // no more rounds to play, return solution array for current round
     if (roundsToGo === 0) {
       outcomes.push(thrown.slice()); // push copy of solution onto outcomes
@@ -23,4 +23,9 @@ var rockPaperScissors = function(rounds) {
   return outcomes;
 };
 
-console.log(rockPaperScissors(3));
+async function main() {
+  const result = await rockPaperScissors(4);
+  console.log(result);
+}
+
+main();

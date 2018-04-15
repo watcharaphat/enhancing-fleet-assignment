@@ -122,39 +122,32 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
   // writeToJsonFile('json/schedule.json', schedule);
 
   const decisionTree = [];
-  const currentPath = [];
-  let counter = 0;
+  // const currentPath = [];
   // let currentAircraft = 1;
 
   // console.log(getOperatableList(schedule, 0));
 
-  decisionTree.indexOfArray = (arr) => {
-    for (let i = 0; i < decisionTree.length; i++) {
-      let isEqual = false;
-      for (let j = 0; j < decisionTree[i].length; j++) {
-        if (decisionTree[i][j] !== arr[j]) break;
-        if (j === decisionTree.length - 1) {
-          return i;
-        }
-      }
-    }
+  const choices = [];
+  for (let i = 0; i < schedule.length; i++) {
+    choices[i] = getOperatableList(schedule, i);
+  }
 
-    return -1;
-  };
+  console.log(util.inspect(choices, false, null, true));
 
-  const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true) => {
+  console.log('\n******************************\n');
+
+  const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true, currentPath = []) => {
     if (isPathComplete(schedule, currentPath)) {
       // console.log('* * * * * FINISH A PATH ! ! ! * * * * *');
       // console.log(`pushing into decisionTree: ${currentPath}`);
       // if (decisionTree.indexOfArray(currentPath) === -1) {
         decisionTree.push(currentPath.slice());
       // }
-      counter++;
       return true;
     }
 
     if (isNewAircraft) {
-      console.log(`*** New: ${currentAircraft}, cp: ${currentPath}`);
+      // console.log(`*** New: ${currentAircraft}, cp: ${currentPath}`);
       for (let i = currentRow; i < schedule.length; i++) {
         // if (currentPath[i]) {
         //   if (currentPath[i] === currentAircraft) {
@@ -175,30 +168,30 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
       }
     }
 
-    const choices = getOperatableList(schedule, currentRow);
+    // const choices = getOperatableList(schedule, currentRow);
     // console.log(`choices for row: ${currentRow} are: ${choices}`);
 
     // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
 
     const pickableChoices = [];
     // let pickedChoice;
-    for (let j = 0; j < choices.length; j++) {
-      if (!currentPath[choices[j]]) {
-        pickableChoices.push(choices[j]);
-        break;
+    for (let j = 0; j < choices[currentRow].length; j++) {
+      if (!currentPath[choices[currentRow][j]]) {
+        pickableChoices.push(choices[currentRow][j]);
+        // break;
         // if (!pickedChoice) pickedChoice = choices[j];
       }
     }
     pickableChoices.push(null);
 
-    // console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
+    console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
 
     // console.log(`choices: ${util.inspect(pickableChoices, false, null, true)}`);
 
     while (pickableChoices.length > 0) {
       const pickedChoice = pickableChoices.shift();
       if (!pickedChoice) {
-        pathAssign(currentAircraft + 1, 0, true);
+        pathAssign(currentAircraft + 1, 0, true, currentPath);
         return;
       }
 
@@ -211,7 +204,7 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
       // }
 
       currentPath[pickedChoice] = currentAircraft;
-      pathAssign(currentAircraft, pickedChoice, false);
+      pathAssign(currentAircraft, pickedChoice, false, currentPath);
       // console.log(`called recursion for same AC: ${currentAircraft}`);
       delete currentPath[pickedChoice];
     }
