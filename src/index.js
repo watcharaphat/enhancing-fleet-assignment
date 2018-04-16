@@ -69,37 +69,35 @@ async function dynamicAssign(aircraftList, flightTable) {
 
   // checkAssignedSchedule(flightTable, '= = = Checking Dynamic Assigned = = =');
 
-  let decisionTree = getDecisionTree(aList, A + 1);
+  let decisionTree = getDecisionTree(cList);
   console.log('decisionTree size: ', decisionTree.length);
 
-  let globalMin = Infinity;
+  // let globalMin = Infinity;
 
-  for (let i = 0; i < decisionTree.length; i++) {
-    let localMin = decisionTree[i][0];
-    for (let j = 1; j < decisionTree.length; j++) {
-      localMin = localMin < decisionTree[i][j] ? decisionTree[i][j] : localMin;
-    }
+  // for (let i = 0; i < decisionTree.length; i++) {
+  //   let localMin = decisionTree[i][0];
+  //   for (let j = 1; j < decisionTree.length; j++) {
+  //     localMin = localMin < decisionTree[i][j] ? decisionTree[i][j] : localMin;
+  //   }
     
-    globalMin = globalMin > localMin ? localMin : globalMin;
+  //   globalMin = globalMin > localMin ? localMin : globalMin;
 
-    console.log(`index: ${i}`);
-    console.log(`localMin: ${localMin}`);
-    console.log('= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ');
-  }
+  //   console.log(`index: ${i}`);
+  //   console.log(`localMin: ${localMin}`);
+  //   console.log('= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ');
+  // }
 
-  console.log(`globalMin: ${globalMin}`);
-
-  console.log('* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ');
+  // console.log(`globalMin: ${globalMin}`);
 
   printMatrix(decisionTree);
 
-  aList.forEach((row, index) => {
-    row.aircraftNo = decisionTree[decisionTree.length - 1][index];
+  cList.forEach((row, index) => {
+    row.aircraftNo = decisionTree[0][index];
     printRow(row);
   });
 
-  for (let i = 1; i <= 6; i++) {
-    checkAssignedSchedule(aList, i);
+  for (let i = 1; i <= 0; i++) {
+    checkAssignedSchedule(cList, i);
   }
 
 
@@ -115,7 +113,16 @@ async function dynamicAssign(aircraftList, flightTable) {
   // });
 }
 
-function getDecisionTree(schedule, numberOfAitcrafts) {
+function getNumberOfAircrafts(path) {
+  let numberOfAitcrafts = -Infinity;
+  for (let i = 0; i < path.length; i++) {
+    numberOfAitcrafts = numberOfAitcrafts > path[i] ? numberOfAitcrafts : path[i];
+  }
+
+  return numberOfAitcrafts;
+}
+
+function getDecisionTree(schedule) {
   console.log('\n* * * * * Constructing Decision Tree * * * * *\n');
   // clear aircraftNo, just for testing
   schedule.forEach((row) => {
@@ -130,37 +137,22 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
     choices[i] = getOperatableList(schedule, i);
   }
 
+  let bound = Infinity;
+
   const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true, currentPath = []) => {
-    if (currentAircraft > 6) {
-      return;
-    }
-    // console.log(`currentPath: ${util.inspect(currentPath, false, null, true)}`);
-    // console.log(`decisionTree: ${util.inspect(decisionTree, false, null, true)}`);
+    if (currentAircraft > bound) return;
+
     if (isPathComplete(schedule, currentPath)) {
-      // console.log('* * * * * FINISH A PATH ! ! ! * * * * *');
-      // console.log(`pushing into decisionTree: ${currentPath}`);
-      // if (decisionTree.indexOfArray(currentPath) === -1) {
-        decisionTree.push(currentPath.slice());
-        // writeToJsonFile('json/DecisionTree.json', decisionTree);
-      // }
+      let numberOfAitcrafts = getNumberOfAircrafts(currentPath);
+      bound = bound <= numberOfAitcrafts ? bound : numberOfAitcrafts;
+      console.log(`Current bound: ${bound}`);
+      decisionTree.push(currentPath.slice());
       return true;
     }
 
     if (isNewAircraft) {
-      // console.log(`*** New: ${currentAircraft}, cp: ${currentPath}`);
       for (let i = currentRow; i < schedule.length; i++) {
-        // if (currentPath[i]) {
-        //   if (currentPath[i] === currentAircraft) {
-        //     console.log('bobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobo');
-        //     return;
-        //   }
-        // }
         if (!currentPath[i]) {
-          if (currentPath[i - 1] === currentAircraft) {
-            // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            // console.log(`AC${currentAircraft} is going to wrong`);
-            return;
-          }
           currentPath[i] = currentAircraft;
           currentRow = i;
           break;
@@ -168,25 +160,15 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
       }
     }
 
-    // const choices = getOperatableList(schedule, currentRow);
-    // console.log(`choices for row: ${currentRow} are: ${choices}`);
-
-    // console.log(`AC: ${currentAircraft} at i: ${i}, no choice`);
-
     const pickableChoices = [];
-    // let pickedChoice;
+
     for (let j = 0; j < choices[currentRow].length; j++) {
       if (!currentPath[choices[currentRow][j]]) {
         pickableChoices.push(choices[currentRow][j]);
         break;
-        // if (!pickedChoice) pickedChoice = choices[j];
       }
     }
     pickableChoices.push(null);
-
-    // console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
-
-    // console.log(`choices: ${util.inspect(pickableChoices, false, null, true)}`);
 
     while (pickableChoices.length > 0) {
       const pickedChoice = pickableChoices.shift();
@@ -197,24 +179,8 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
 
       currentPath[pickedChoice] = currentAircraft;
       pathAssign(currentAircraft, pickedChoice, false, currentPath.slice());
-      // console.log(`called recursion for same AC: ${currentAircraft}`);
       delete currentPath[pickedChoice];
     }
-
-    // pickableChoices.forEach((choice) => {
-    //   if (choice === null) {
-    //     pathAssign(currentAircraft + 1, 0, true);
-    //     return;
-    //   }
-
-    //   currentPath[choice] = currentAircraft;
-    //   // if (currentAircraft === 3) {
-    //   //   // console.log(`Assigning AC${2} current at ${currentRow} to flight: ${choice} and currentPath is ${currentPath}`);
-    //   // }
-
-    //   pathAssign(currentAircraft, choice, false);
-    //   delete currentPath[choice];
-    // });
   };
 
   pathAssign();

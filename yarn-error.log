@@ -2370,7 +2370,7 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 134
+  Exit code: 1
   Command: sh
   Arguments: -c npm run build && node build/index.js
   Directory: /Users/watcharaphat/Documents/CPEY4/ProjectRelate/code/enhancing-fleet-assignment
