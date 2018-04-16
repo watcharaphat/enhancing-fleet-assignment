@@ -93,12 +93,14 @@ async function dynamicAssign(aircraftList, flightTable) {
 
   printMatrix(decisionTree);
 
-  // aList.forEach((row, index) => {
-  //   row.aircraftNo = decisionTree[decisionTree.length - 1][index];
-  //   printRow(row);
-  // });
+  aList.forEach((row, index) => {
+    row.aircraftNo = decisionTree[decisionTree.length - 1][index];
+    printRow(row);
+  });
 
-  // checkAssignedSchedule(aList);
+  for (let i = 1; i <= 6; i++) {
+    checkAssignedSchedule(aList, i);
+  }
 
 
   /* testing timeSpaceGraph */
@@ -122,26 +124,24 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
   // writeToJsonFile('json/schedule.json', schedule);
 
   const decisionTree = [];
-  // const currentPath = [];
-  // let currentAircraft = 1;
-
-  // console.log(getOperatableList(schedule, 0));
 
   const choices = [];
   for (let i = 0; i < schedule.length; i++) {
     choices[i] = getOperatableList(schedule, i);
   }
 
-  console.log(util.inspect(choices, false, null, true));
-
-  console.log('\n******************************\n');
-
   const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true, currentPath = []) => {
+    if (currentAircraft > 6) {
+      return;
+    }
+    // console.log(`currentPath: ${util.inspect(currentPath, false, null, true)}`);
+    // console.log(`decisionTree: ${util.inspect(decisionTree, false, null, true)}`);
     if (isPathComplete(schedule, currentPath)) {
       // console.log('* * * * * FINISH A PATH ! ! ! * * * * *');
       // console.log(`pushing into decisionTree: ${currentPath}`);
       // if (decisionTree.indexOfArray(currentPath) === -1) {
         decisionTree.push(currentPath.slice());
+        // writeToJsonFile('json/DecisionTree.json', decisionTree);
       // }
       return true;
     }
@@ -178,33 +178,25 @@ function getDecisionTree(schedule, numberOfAitcrafts) {
     for (let j = 0; j < choices[currentRow].length; j++) {
       if (!currentPath[choices[currentRow][j]]) {
         pickableChoices.push(choices[currentRow][j]);
-        // break;
+        break;
         // if (!pickedChoice) pickedChoice = choices[j];
       }
     }
     pickableChoices.push(null);
 
-    console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
+    // console.log(`picableChoices for AC${currentAircraft} at ${currentRow} are: ${util.inspect(pickableChoices, false, null, true)}`);
 
     // console.log(`choices: ${util.inspect(pickableChoices, false, null, true)}`);
 
     while (pickableChoices.length > 0) {
       const pickedChoice = pickableChoices.shift();
       if (!pickedChoice) {
-        pathAssign(currentAircraft + 1, 0, true, currentPath);
+        pathAssign(currentAircraft + 1, 0, true, currentPath.slice());
         return;
       }
 
-      if (currentPath[pickableChoices - 1] === currentAircraft) {
-        console.log(';ofjdsjf;dsjflksjflk;wjlkdaskldjlaksdlkasjdklasj');
-      }
-
-      // if (!isValidAssign(schedule, pickedChoice, currentAircraft, currentPath)) {
-      //   return;
-      // }
-
       currentPath[pickedChoice] = currentAircraft;
-      pathAssign(currentAircraft, pickedChoice, false, currentPath);
+      pathAssign(currentAircraft, pickedChoice, false, currentPath.slice());
       // console.log(`called recursion for same AC: ${currentAircraft}`);
       delete currentPath[pickedChoice];
     }
