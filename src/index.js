@@ -528,6 +528,8 @@ async function main() {
     dynamTyping: false,
   }).data;
 
+  console.log(data);
+
   data.forEach((row) => {
     for (let key in row) {
       row[key] = row[key].replace(/\s\s+/g, ' ');
