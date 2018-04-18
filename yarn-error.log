@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/9.5.0/bin/node /Users/watcharaphat/.yarn/bin/yarn.js run write-data
+  /usr/local/Cellar/node/9.5.0/bin/node /Users/watcharaphat/.yarn/bin/yarn.js start
 
 PATH: 
   /Users/watcharaphat/.yarn/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/mysql/bin:/Users/watcharaphat/myProgram/apache-maven-3.5.0/bin:/Users/watcharaphat/.composer/vendor/bin
@@ -2721,9 +2721,9 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 134
+  Exit code: 1
   Command: sh
-  Arguments: -c npm run build && node build/data/WriteData.js
+  Arguments: -c npm run build && node build/index.js
   Directory: /Users/watcharaphat/Documents/CPEY4/ProjectRelate/code/enhancing-fleet-assignment
   Output:
   

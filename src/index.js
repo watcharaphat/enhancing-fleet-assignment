@@ -7,7 +7,6 @@ import { convertTime, convertTimePlusTurnTime } from './modules/utils/ConvertTim
 import { printRow } from './modules/utils/PrintRow';
 import { printMatrix } from './modules/utils/PrintMatrix';
 import { checkAssignedSchedule, isConflict, countNotAssigned } from './modules/utils/CheckAssignedSchedule';
-import { WriteToJsonFile, writeToJsonFile } from './modules/utils/WriteToJsonFile';
 // import timeSpaceNetwork from './algorithm/TimeSpaceNetwork';
 
 const moment = extendMoment(Moment);
@@ -72,23 +71,6 @@ async function dynamicAssign(aircraftList, flightTable) {
   let decisionTree = getDecisionTree(cList);
   console.log('decisionTree size: ', decisionTree.length);
 
-  // let globalMin = Infinity;
-
-  // for (let i = 0; i < decisionTree.length; i++) {
-  //   let localMin = decisionTree[i][0];
-  //   for (let j = 1; j < decisionTree.length; j++) {
-  //     localMin = localMin < decisionTree[i][j] ? decisionTree[i][j] : localMin;
-  //   }
-    
-  //   globalMin = globalMin > localMin ? localMin : globalMin;
-
-  //   console.log(`index: ${i}`);
-  //   console.log(`localMin: ${localMin}`);
-  //   console.log('= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ');
-  // }
-
-  // console.log(`globalMin: ${globalMin}`);
-
   printMatrix(decisionTree);
 
   cList.forEach((row, index) => {
@@ -96,21 +78,9 @@ async function dynamicAssign(aircraftList, flightTable) {
     printRow(row);
   });
 
-  for (let i = 1; i <= 0; i++) {
-    checkAssignedSchedule(cList, i);
-  }
-
-
-  /* testing timeSpaceGraph */
-  // let ts = constructTimeSpaceGraphOnTime(aList, aList[0].depTime);
-
-  // for (let i = 1; i <= 6; i++) {
-  //   checkAssignedSchedule(aList, i);
+  // for (let i = 1; i <= 0; i++) {
+    // checkAssignedSchedule(cList, i);
   // }
-
-  // aList.forEach((row) => {
-  //   printRow(row, 1);
-  // });
 }
 
 function getNumberOfAircrafts(path) {
@@ -145,7 +115,6 @@ function getDecisionTree(schedule) {
     if (isPathComplete(schedule, currentPath)) {
       let numberOfAitcrafts = getNumberOfAircrafts(currentPath);
       bound = bound <= numberOfAitcrafts ? bound : numberOfAitcrafts;
-      console.log(`Current bound: ${bound}`);
       decisionTree.push(currentPath.slice());
       return true;
     }
@@ -279,22 +248,6 @@ function isOperatable(row1, row2) {
   return (row1.destinationCode === row2.originCode) && !isConflict(row1, row2);
 }
 
-// function isDone(schedule) {
-//   for (let i = 0; i < schedule.length; i++) {
-//     const row = schedule[i];
-
-//     if (!row.aircraftNo) {
-//       console.log('not done')
-//       return false;
-//     }
-//   }
-
-//   console.log('done');
-
-//   // all row in schedule assigned
-//   return true;
-// }
-
 function compareFlight(row1, row2) {
   if (row1.momentRange.end < row2.momentRange.end) {
     return -1;
@@ -336,43 +289,6 @@ async function timeSpaceAssign(aircraftList, flightTable) {
   await constructTimeSpaceGraphOnTime(flightTable);
 }
 
-// async function constructTimeSpaceGraphOnTime(schedule, time) {
-//   console.log(`Constructing Time Space Graph at ${time}`);
-
-//   const aircraftList = ['(PG) 319', '(PG) 320', '(PG) AT7'];
-//   let tsGraph = {
-//     '(PG) 319': {},
-//     '(PG) 320': {},
-//     '(PG) AT7': {},
-//   };
-
-//   for (let i = 0; i < schedule.length; i++) {
-//     const row = schedule[i];
-//     const equipmentName = row.equipmentName;
-//     const aircraftNo = row.aircraftNo;
-
-//     // console.log(aircraftNo);
-
-//     if (!tsGraph[equipmentName][aircraftNo.toString()]) {
-//       initAircraftGraph(tsGraph, equipmentName, aircraftNo)
-//       // console.log(`init ${equipmentName}: ${aircraftNo}`);
-//     }
-
-//     const timeMoment = moment(`${moment().format('YYYY-MM-DD')} ${time}`);
-//     let isOnGround = true;
-    
-//     if (row.momentRange.contains(timeMoment)) {
-//       console.log(`${i}: contains`);
-//       isOnGround = false;
-//     } else {
-//       console.log(`${i}: not`);
-//       isOnGround = true;
-//     }
-//   }
-
-//   console.log(tsGraph);
-// }
-
 async function constructTimeSpaceGraphOnTime(schedule) {
   console.log(`\n\n***** Constructing Time Space Graph for all time *****\n\n`);
 
@@ -383,16 +299,12 @@ async function constructTimeSpaceGraphOnTime(schedule) {
     // '(PG) AT7': {},
   };
 
-  // const timesSet = new Set();
   const times = [];
 
   schedule.forEach((row) => {
     const depMoment = row.momentRange.start;
     const arrMoment = row.momentRange.end;
 
-    // timesSet.add(depMoment);
-    // timesSet.add(arrMoment);
-    
     let isDepSame = false;
     for (let i = 0; i < times.length; i++) {
       if (times[i].isSame(depMoment)) {
@@ -419,8 +331,6 @@ async function constructTimeSpaceGraphOnTime(schedule) {
       return 1;
     }
   });
-
-  // const times = [...timesSet];
 
   // max number of links
   let max = -1;
@@ -464,56 +374,18 @@ async function constructTimeSpaceGraphOnTime(schedule) {
 
 
       }
-
-      // if (timeMoment.isBefore(row.momentRange.start)) {
-      //   console.log(`${timeMoment.format('HH:mm:ss')} isBefore ${row.momentRange.start.format('HH:mm:ss')}`);
-      //   break;
-      // }
     }
 
     for (let time in tsGraph['(PG) 319']) {
       const numberOfLinks = tsGraph['(PG) 319'][time].links.length;
-      // if (numberOfLinks === 5) console.log(`*****\n${tsGraph['(PG) 319'][time].links}\n*****\n`);
 
       max = numberOfLinks > max ? numberOfLinks : max;
     }
   }
 
-
-  // for (let i = 0; i < schedule.length; i++) {
-  //   const row = schedule[i];
-  //   const equipmentName = row.equipmentName;
-  //   const aircraftNo = row.aircraftNo;
-
-  //   // console.log(aircraftNo);
-
-  //   if (!tsGraph[equipmentName][aircraftNo.toString()]) {
-  //     initAircraftGraph(tsGraph, equipmentName, aircraftNo)
-  //     // console.log(`init ${equipmentName}: ${aircraftNo}`);
-  //   }
-
-  //   // const timeMoment = moment(`${moment().format('YYYY-MM-DD')} ${time}`);
-  //   // let isOnGround = true;
-    
-  //   // if (row.momentRange.contains(timeMoment)) {
-  //   //   console.log(`${i}: contains`);
-  //   //   isOnGround = false;
-  //   // } else {
-  //   //   console.log(`${i}: not`);
-  //   //   isOnGround = true;
-  //   // }
-  // }
-
   console.log(util.inspect(tsGraph, false, null, true));
   console.log(`Max number of links: ${max}`);
 }
-
-// function initAircraftGraph(tsGraph, equipmentName, aircraftNo) {
-//   // console.log(equipmentName);
-//   tsGraph[equipmentName][aircraftNo] = {
-//     status: '',
-//   };
-// }
 
 async function main() {
   const turnTime = 30;
