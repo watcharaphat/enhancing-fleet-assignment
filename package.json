@@ -5,6 +5,7 @@
   "scripts": {
     "build": "./node_modules/.bin/babel src -d build --source-maps inline",
     "start": "npm run build && node build/index.js",
+    "write-data": "npm run build && node build/data/WriteData.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "https://github.com/watcharaphat/enhancinf-fleet-assignment",
@@ -29,6 +30,7 @@
   "dependencies": {
     "moment": "^2.20.1",
     "moment-range": "^3.1.1",
+    "mongoose": "^5.0.15",
     "papaparse": "^4.3.7"
   }
 }
