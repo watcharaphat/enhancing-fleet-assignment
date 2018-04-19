@@ -400,7 +400,7 @@ async function main() {
     dynamTyping: false,
   }).data;
 
-  console.log(data);
+  // console.log(data);
 
   data.forEach((row) => {
     for (let key in row) {
