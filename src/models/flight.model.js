@@ -13,6 +13,6 @@ const FlightSchema = new Schema({
   equiptmentName: String,
   depTime: String,
   arrTime: String,
-})
+});
 
 export default mongoose.model('Flight', FlightSchema);

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import flightModel from './flight.model';
 import databaseEnv from '../env';
 
 mongoose.Promise = global.Promise;

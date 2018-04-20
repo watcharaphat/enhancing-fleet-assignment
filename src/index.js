@@ -159,27 +159,6 @@ function getDecisionTree(schedule) {
   return decisionTree;
 }
 
-function isValidAssign(schedule, index, aircraftNo, currentPath) {
-  let latestRow;
-
-  for (let i = schedule.length - 1; i >= 0; i--) {
-    if (currentPath[i] === aircraftNo) {
-      latestRow = i;
-    }
-  }
-
-  const isValid = isOperatable(schedule[latestRow], schedule[index]);
-
-  if (!isValid) { 
-    console.log(`!!! INVALID AT latest: ${latestRow}, index: ${index}`);
-
-    const ol = getOperatableList(schedule, latestRow);
-    console.log(`latestRow: ${latestRow}, ol: ${ol}`);
-  }
-
-  return isValid
-}
-
 function getOperatableList(schedule, latestRow) {
   const operatableList = [];
 

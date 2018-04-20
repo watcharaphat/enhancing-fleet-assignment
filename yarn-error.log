@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/9.5.0/bin/node /Users/watcharaphat/.yarn/bin/yarn.js start
+  /usr/local/Cellar/node/9.5.0/bin/node /Users/watcharaphat/.yarn/bin/yarn.js run write-data
 
 PATH: 
   /Users/watcharaphat/.yarn/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/mysql/bin:/Users/watcharaphat/myProgram/apache-maven-3.5.0/bin:/Users/watcharaphat/.composer/vendor/bin
@@ -22,6 +22,7 @@ npm manifest:
       "build": "./node_modules/.bin/babel src -d build --source-maps inline",
       "start": "npm run build && node build/index.js",
       "write-data": "npm run build && node build/data/WriteData.js",
+      "server": "npm run build && node build/server.js",
       "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": "https://github.com/watcharaphat/enhancinf-fleet-assignment",
@@ -2723,7 +2724,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c npm run build && node build/index.js
+  Arguments: -c npm run build && node build/data/WriteData.js
   Directory: /Users/watcharaphat/Documents/CPEY4/ProjectRelate/code/enhancing-fleet-assignment
   Output:
   

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import databaseEnv from '../env';
-import flightModel from '../models/flight.model';
+import FlightModel from '../models/flight.model';
 import fs from 'fs';
 import util from 'util';
 import Papa from 'papaparse';
@@ -94,7 +94,7 @@ async function main() {
     const document = getDocument(data[i]);
 
     try {
-      if (document) promiseArray.push(flightModel.create(document));
+      if (document) promiseArray.push(FlightModel.create(document));
     } catch (error) {
       console.error('Error on create document', error);                 
     }
