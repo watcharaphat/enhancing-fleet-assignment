@@ -405,8 +405,6 @@ async function main() {
 
   await dynamicAssign(aircraftList, data);
   // await timeSpaceAssign(aircraftList, data);
-
-  console.log(data[0]);
 }
 
 main();
