@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import databaseEnv from '../env';
+import databaseEnv from '../../env';
 
 mongoose.Promise = global.Promise;
 

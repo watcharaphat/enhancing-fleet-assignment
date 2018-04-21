@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import databaseEnv from '../env';
-import FlightModel from '../models/flight.model';
+import FlightModel from '../app/models/flight.model';
 import fs from 'fs';
 import util from 'util';
 import Papa from 'papaparse';

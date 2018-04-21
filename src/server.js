@@ -1,19 +1,13 @@
-import * as mongoose from './models/models';
-import moment from 'moment';
-import FlightModel from './models/flight.model';
-import util from 'util';
+import * as mongoose from './app/models/models';
+import express from './config/express';
 
 mongoose.connectDatabase().then(async (result) => {
-  const date = moment('Jan 1 2017', 'MMM DD YYYY').toDate();
-  const airline = 'PG';
+  const app = express();
+  const port = 3000;
+  
+  app.listen(port);
 
-  let schedule;
-  try {
-    schedule = await FlightModel.find({ date, airline });
-  } catch (error) {
-    console.error('Error query in FlightModel', error);
-  }
-  console.log(util.inspect(schedule, false, null, true));
+  console.log('Sever is running at localhost:3000');
 }).catch((error) => {
   console.error('Error connecting database', error);
 });
