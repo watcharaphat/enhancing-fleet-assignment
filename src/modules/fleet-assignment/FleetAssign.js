@@ -1,7 +1,9 @@
+import timeSpaceAssign from './TimeSpaceAssign';
+
 export default function fleetAssign(req, res, next) {
   switch (req.query.algorithm) {
     case 'ts':
-      console.log('TimeSpace Assign');
+      timeSpaceAssign(req.schedule);
       break;
     case 'dynamic':
       console.log('Dynamic Assign');
