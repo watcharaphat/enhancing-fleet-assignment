@@ -8,7 +8,7 @@ export default function(schedule) {
   aircraftList.forEach((aircraft) => {
     jobs.push({
       'equipmentName': aircraft,
-      'flightTable': filter(schedule, `equipmentName=${aircraft}`),
+      'schedule': filter(schedule, `equipmentName=${aircraft}`),
     });
   });
 
