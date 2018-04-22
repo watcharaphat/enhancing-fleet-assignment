@@ -21,6 +21,16 @@ export default function parseSchedule(req, res, next) {
 
     row.momentRange = moment.range(depMoment, arrMoment);
   });
+
+  // sort by depTime: start
+  // sort by arrTime: end
+  req.schedule.sort((row1, row2) => {
+    if (row1.momentRange.start < row2.momentRange.start) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
   
   res.json(req.schedule);
   return req.schedule;

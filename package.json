@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "./node_modules/.bin/babel src -d build --source-maps inline",
-    "start": "npm run build && node build/index.js",
+    "start": "nodemon src/server.js --exec babel-node",
+    "assign": "npm run build && node build/index.js",
     "write-data": "npm run build && node build/data/WriteData.js",
     "server": "npm run build && node build/server.js",
     "parser": "npm run build && node build/parser.js",
