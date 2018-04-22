@@ -31,7 +31,6 @@ export default function parseSchedule(req, res, next) {
       return 1;
     }
   });
-  
-  res.json(req.schedule);
-  return req.schedule;
+
+  next();
 }
