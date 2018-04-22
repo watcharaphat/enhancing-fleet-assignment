@@ -8,7 +8,7 @@ export default function(schedule) {
     const paths = getAssignPath(jobs[i].schedule);
 
     // must decide which path is the best.
-    const bestPath = paths[paths.length - 1];
+    const bestPath = paths[0];
 
     helper.assignPathToSchedule(jobs[i].schedule, bestPath);
   }
@@ -16,12 +16,6 @@ export default function(schedule) {
 
 function getAssignPath(schedule) {
   const paths = [];
-  const choices = [];
-
-  for (let i = 0; i < schedule.length; i++) {
-    choices[i] = helper.getOperatableList(schedule, i);
-  }
-
   let bound = Infinity;
 
   const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true, currentPath = []) => {
@@ -48,11 +42,13 @@ function getAssignPath(schedule) {
       }
     }
 
+    const choices = helper.getOperatableList(schedule, currentRow);
+
     const pickableChoices = [];
 
-    for (let j = 0; j < choices[currentRow].length; j++) {
-      if (!currentPath[choices[currentRow][j]]) {
-        pickableChoices.push(choices[currentRow][j]);
+    for (let j = 0; j < choices.length; j++) {
+      if (!currentPath[choices[j]]) {
+        pickableChoices.push(choices[j]);
         break;
       }
     }
