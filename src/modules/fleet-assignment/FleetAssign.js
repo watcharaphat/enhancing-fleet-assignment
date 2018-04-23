@@ -1,5 +1,6 @@
 import timeSpaceAssign from './TimeSpaceAssign';
 import dynamicAssign from './DynamicAssign';
+import greedyAssign from './GreedyAssign';
 
 export default function fleetAssign(req, res, next) {
   switch (req.query.algorithm) {
@@ -10,7 +11,7 @@ export default function fleetAssign(req, res, next) {
       dynamicAssign(req.schedule);
       break;
     case 'greedy':
-      console.log('Greedy Assign');
+    greedyAssign(req.schedule);
       break;
     default:
       console.log(`Invalid Algorithm Request: ${req.query.algorithm}`);
