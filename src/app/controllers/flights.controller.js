@@ -3,7 +3,7 @@ import moment from 'moment';
 import Flight from '../models/flight.model';
 
 export async function list(req, res, next) {
-  // console.log(`got a request`);
+  console.log(req.originalUrl);
   const date = moment(req.query.date, 'DD-MMM-YYYY').toDate();
 
   try {

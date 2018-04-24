@@ -8,6 +8,11 @@ export default function(schedule) {
     const paths = getAssignPath(jobs[i].schedule);
 
     // must decide which path is the best.
+    // uniform test => error = (y^ - y)**2
+    // Friday 27th 01:30 PM:
+    // - Poster
+    // - *** Table, Uniform test -> p-value, Error
+    // grant chart
     const bestPath = paths[paths.length - 1];
 
     helper.assignPathToSchedule(jobs[i].schedule, bestPath);
