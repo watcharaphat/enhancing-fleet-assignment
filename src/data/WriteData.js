@@ -59,7 +59,7 @@ function getDocument(row) {
     'kilometers': kilometers,
     'flight': row['Flight'],
     'stops': row['Stops'],
-    'equiptmentName': row['Equip'],
+    'equipmentName': row['Equip'],
     'depTime': row['Dep Time'],
     'arrTime': row['Arr Time'],
     'blockMins': row['Block Mins'],
