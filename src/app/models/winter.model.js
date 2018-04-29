@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const SummerSchema = new Schema({
+const WinterSchema = new Schema({
   airline: String,
   originCode: String,
   destinationCode: String,
@@ -15,4 +15,4 @@ const SummerSchema = new Schema({
   endDate: String,
 });
 
-export default mongoose.model('Summer', SummerSchema);
+export default mongoose.model('Winter', WinterSchema);

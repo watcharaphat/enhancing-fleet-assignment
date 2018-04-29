@@ -136,7 +136,7 @@ export function getBestPath(paths) {
   };
 }
 
-function chiSquaredTest(array) {
+export function chiSquaredTest(array) {
   let sum = 0;
   array.forEach(data => sum += data);
 

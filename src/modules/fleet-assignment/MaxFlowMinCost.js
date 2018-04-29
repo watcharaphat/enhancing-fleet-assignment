@@ -28,9 +28,15 @@ function mbpAssign(schedule) {
 
   const connectedComponents = findConnectedComponents(adjList);
 
+  let counter = [];
   connectedComponents.forEach((component, index) => {
+    counter[index] = 0;
     component.forEach((vertex) => {
       schedule[vertex].aircraftNo = index + 1;
+      counter[index]++;
     });
   });
+
+  const testResult = helper.chiSquaredTest(counter);
+  console.log(testResult);
 }

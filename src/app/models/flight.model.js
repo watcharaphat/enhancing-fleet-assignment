@@ -10,7 +10,7 @@ const FlightSchema = new Schema({
   kilometers:  Number,
   flight: Number,
   stops: Number,
-  equiptmentName: String,
+  equipmentName: String,
   depTime: String,
   arrTime: String,
 });
