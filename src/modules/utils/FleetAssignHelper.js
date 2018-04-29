@@ -116,21 +116,27 @@ export function getBestPath(paths) {
   let max = -Infinity;
   let min = Infinity;
   let bestPath;
+  let uniformCounter = 0;
   counter.forEach((array, index) => {
-    const squaredError = calUniformSquaredError(array);
-    if (min > squaredError) {
-      min = squaredError;
+    // const squaredError = calUniformSquaredError(array);
+    const testResult = chiSquaredTest(array);
+
+    if (min > testResult.squaredError) {
+      min = testResult.squaredError;
       bestPath = paths[index];
     }
+
+    if (testResult.isUniform) uniformCounter++;
   });
 
   return {
     path: bestPath,
     squaredError: min,
+    numberOfUniformChoices: uniformCounter,
   };
 }
 
-function calUniformSquaredError(array) {
+function chiSquaredTest(array) {
   let sum = 0;
   array.forEach(data => sum += data);
 
@@ -141,9 +147,15 @@ function calUniformSquaredError(array) {
 
   const p = pValue(x2, array.length - 1);
 
-  // console.log(`${array}, p = ${p}, x2 = ${x2}`,);
+  // console.log(`x2: ${x2}, p: ${p}`);
 
-  return x2;
+  let isPassUniformTest = false;
+  if (p > 0.05)  isPassUniformTest = true;
+
+  return {
+    squaredError: x2,
+    isUniform: isPassUniformTest,
+  };
 }
 
 function pValue(x2, df) {

@@ -18,7 +18,7 @@ export default function(schedule) {
     helper.assignPathToSchedule(jobs[i].schedule, bestPath.path);
 
     // report
-    console.log(`${jobs[i].equipmentName}, Squared Error: ${bestPath.squaredError}, Number of choices: ${paths.length}`);
+    console.log(`${jobs[i].equipmentName}, Squared Error: ${bestPath.squaredError}, Number of choices: ${paths.length}, Uniform choices: ${bestPath.numberOfUniformChoices}`);
   }
 }
 
