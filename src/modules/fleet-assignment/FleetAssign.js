@@ -7,10 +7,6 @@ import * as helper from '../utils/FleetAssignHelper';
 import util from 'util';
 
 export default function fleetAssign(req, res, next) {
-  if (req.query.season === 'summer') {
-    console.log('summer is here');
-  }
-
   switch (req.query.algorithm) {
     case 'ts':
       timeSpaceAssign(req.schedule);
