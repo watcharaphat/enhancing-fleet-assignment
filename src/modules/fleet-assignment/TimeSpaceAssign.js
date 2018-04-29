@@ -13,9 +13,12 @@ export default function(schedule) {
     // - Poster
     // - *** Table, Uniform test -> p-value, Error
     // grant chart
-    const bestPath = paths[paths.length - 1];
+    const bestPath = helper.getBestPath(paths);
 
-    helper.assignPathToSchedule(jobs[i].schedule, bestPath);
+    helper.assignPathToSchedule(jobs[i].schedule, bestPath.path);
+
+    // report
+    console.log(`${jobs[i].equipmentName}, Squared Error: ${bestPath.squaredError}, Number of choices: ${paths.length}`);
   }
 }
 

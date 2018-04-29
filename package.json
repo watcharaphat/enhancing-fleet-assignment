@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "bipartite-matching": "^1.0.0",
+    "chi-squared": "^1.1.0",
     "connected-components": "^1.0.0",
     "express": "^4.16.3",
     "moment": "^2.20.1",

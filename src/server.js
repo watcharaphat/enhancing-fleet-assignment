@@ -1,7 +1,11 @@
 import * as mongoose from './app/models/models';
 import express from './config/express';
 
+console.log('Connecting database');
+
 mongoose.connectDatabase().then(async (result) => {
+  console.log('Connted to database');
+
   const app = express();
   const port = 3000;
 
