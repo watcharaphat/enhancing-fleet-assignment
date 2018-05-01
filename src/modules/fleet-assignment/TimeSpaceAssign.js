@@ -29,7 +29,7 @@ function getAssignPath(schedule) {
   const INF = (1 << 28);
 
   const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true, currentPath = []) => {
-    if (paths.length >= 16) return;
+    // if (paths.length >= 16) return;
 
     if (currentAircraft > bound) return;
 
