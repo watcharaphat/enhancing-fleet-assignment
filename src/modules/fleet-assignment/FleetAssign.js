@@ -7,6 +7,8 @@ import * as helper from '../utils/FleetAssignHelper';
 import util from 'util';
 
 export default function fleetAssign(req, res, next) {
+  const t1 = Date.now();
+
   switch (req.query.algorithm) {
     case 'ts':
       timeSpaceAssign(req.schedule);
@@ -24,6 +26,10 @@ export default function fleetAssign(req, res, next) {
       console.log(`Invalid Algorithm Request: ${req.query.algorithm}`);
       break;
   }
+
+  const t2 = Date.now();
+  const runningTime = (t2 - t1) / 1000;
+  console.log(`runningTime: ${runningTime} seconds`);
 
   const summary = [];
   const jobs = GetJobList(req.schedule);

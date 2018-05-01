@@ -6,13 +6,6 @@ export default function(schedule) {
 
   for (let i = 0; i < jobs.length; i++) {
     const paths = getAssignPath(jobs[i].schedule);
-
-    // must decide which path is the best.
-    // uniform test => error = (y^ - y)**2
-    // Friday 27th 01:30 PM:
-    // - Poster
-    // - *** Table, Uniform test -> p-value, Error
-    // grant chart
     const bestPath = helper.getBestPath(paths);
 
     helper.assignPathToSchedule(jobs[i].schedule, bestPath.path);
@@ -31,9 +24,17 @@ function getAssignPath(schedule) {
   }
 
   let bound = Infinity;
+  let c = 1;
+
+  const INF = (1 << 28);
 
   const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true, currentPath = []) => {
+    if (paths.length >= 16) return;
+
     if (currentAircraft > bound) return;
+
+    c++;
+    if (c >= INF && paths.length > 0) return;
 
     if (isPathComplete(schedule, currentPath)) {
       let numberOfAitcrafts = getNumberOfAircrafts(currentPath);

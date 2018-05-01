@@ -6,11 +6,9 @@ export default function(schedule) {
 
   for (let i = 0; i < jobs.length; i++) {
     const paths = getAssignPath(jobs[i].schedule);
+    const bestPath = helper.getBestPath(paths);
 
-    // must decide which path is the best.
-    const bestPath = paths[0];
-
-    helper.assignPathToSchedule(jobs[i].schedule, bestPath);
+    helper.assignPathToSchedule(jobs[i].schedule, bestPath.path);
   }
 }
 
@@ -19,6 +17,7 @@ function getAssignPath(schedule) {
   let bound = Infinity;
 
   const pathAssign = (currentAircraft = 1, currentRow = 0, isNewAircraft = true, currentPath = []) => {
+    if (paths.length >= 16) return;
     if (currentAircraft > bound) return;
 
     if (isPathComplete(schedule, currentPath)) {

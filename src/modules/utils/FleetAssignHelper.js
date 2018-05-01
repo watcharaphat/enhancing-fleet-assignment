@@ -144,6 +144,11 @@ export function chiSquaredTest(array) {
 
   let x2 = 0;
   array.forEach(data => x2 += ((data - mean)**2) / mean);
+  
+  // report
+  let sqError = 0;
+  array.forEach(data => sqError += ((data - mean)**2));
+  sqError = (sqError / array.length) ** 0.5;
 
   const p = pValue(x2, array.length - 1);
 
@@ -153,7 +158,7 @@ export function chiSquaredTest(array) {
   if (p > 0.05)  isPassUniformTest = true;
 
   return {
-    squaredError: x2,
+    squaredError: sqError,
     isUniform: isPassUniformTest,
   };
 }
