@@ -10,13 +10,13 @@ export default function(schedule) {
     console.log(`schedule length: ${jobs[i].schedule.length}`);
     mbpAssign(jobs[i].schedule);
   }
-
-  schedule.forEach(row => console.log(row.flight));
 }
 
 function mbpAssign(schedule) {
   const bpLinks = helper.getBpLinks(schedule);
   const maximumMatching = findMatching(schedule.length, schedule.length, bpLinks);
+
+  // console.log(maximumMatching);
 
   const adjList = [];
 
