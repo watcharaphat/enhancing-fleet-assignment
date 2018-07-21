@@ -34,7 +34,7 @@ async function getData() {
     const dataText = await readFileAsync(filePath, { encoding: 'utf8' });
 
     return dataText;
-  } catch(error) {
+  } catch (error) {
     console.error(error);
   }
 }
@@ -76,7 +76,7 @@ async function main() {
   try {
     data = await Papa.parse(dataText, {
       header: true,
-      dynamTyping: false,
+      dynamicTyping: false,
     }).data;
   } catch (error) {
     console.error('Error on papaparse', error);
@@ -96,7 +96,7 @@ async function main() {
     try {
       if (document) promiseArray.push(FlightModel.create(document));
     } catch (error) {
-      console.error('Error on create document', error);                 
+      console.error('Error on create document', error);
     }
   }
 
